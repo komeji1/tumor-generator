@@ -1,0 +1,181 @@
+{
+  "_comment": "===========================================================",
+  "_comment_2": "Tumor Mask Generator — 生成参数配置",
+  "_comment_3": "项目: 肿瘤位置Mask自动生成器",
+  "_comment_4": "创建日期: 2026-06-04",
+  "_comment_5": "===========================================================",
+  "project": {
+    "name": "Tumor Mask Generator",
+    "version": "1.0.0",
+    "output_dir": "output/real_ct/",
+    "description": "在正常CT的器官区域内，按策略自动生成肿瘤位置的二值Mask (.nii.gz, 值域{0,1})"
+  },
+  "data": {
+    "ct_dir": "data/ct/",
+    "organ_label_dir": "data/organ_labels/",
+    "manifest_path": "data/manifest.csv"
+  },
+  "organs": [
+    {
+      "name": "liver_lesion",
+      "class_id": 27,
+      "organ_label_file": "liver.nii.gz",
+      "organ_name": "liver",
+      "count": 50,
+      "description": "肝脏肿瘤"
+    },
+    {
+      "name": "pancreatic_lesion",
+      "class_id": 28,
+      "organ_label_file": "pancreas.nii.gz",
+      "organ_name": "pancreas",
+      "count": 50,
+      "description": "胰腺肿瘤"
+    },
+    {
+      "name": "kidney_lesion",
+      "class_id": 29,
+      "organ_label_file": "kidney_left.nii.gz",
+      "organ_name": "kidney_left",
+      "count": 50,
+      "description": "肾脏肿瘤（优先使用左肾）"
+    },
+    {
+      "name": "colon_lesion",
+      "class_id": 30,
+      "organ_label_file": "colon.nii.gz",
+      "organ_name": "colon",
+      "count": 50,
+      "description": "结肠肿瘤"
+    },
+    {
+      "name": "esophagus_tumor",
+      "class_id": 32,
+      "organ_label_file": "esophagus.nii.gz",
+      "organ_name": "esophagus",
+      "count": 50,
+      "description": "食管肿瘤"
+    },
+    {
+      "name": "endometrioma_tumor",
+      "class_id": 31,
+      "organ_label_file": "uterus.nii.gz",
+      "organ_name": "uterus",
+      "count": 50,
+      "description": "子宫内膜瘤（子宫肿瘤）"
+    }
+  ],
+  "size_categories": {
+    "_ref": "Scaling Tumor (ICCV 2025) §3.2 (P5) + §4.1 (P7)",
+    "_note": "tiny 不在 4:2:1 比例中显式列出，论文将其单列以强调早期小肿瘤的重要性。代码遍历 categories.*.weight 即可获取权重。",
+    "categories": {
+      "tiny": {
+        "r_min_mm": 1,
+        "r_max_mm": 5,
+        "weight": 0,
+        "description": "r ≤ 5 mm — 微小肿瘤 (Scaling §3.2)"
+      },
+      "small": {
+        "r_min_mm": 5,
+        "r_max_mm": 10,
+        "weight": 4,
+        "description": "5 < r ≤ 10 mm — 小肿瘤 (4:2:1 中的 '4')"
+      },
+      "medium": {
+        "r_min_mm": 10,
+        "r_max_mm": 20,
+        "weight": 2,
+        "description": "10 < r ≤ 20 mm — 中等肿瘤 (4:2:1 中的 '2')"
+      },
+      "large": {
+        "r_min_mm": 20,
+        "r_max_mm": 50,
+        "weight": 1,
+        "description": "r > 20 mm — 大肿瘤 (4:2:1 中的 '1')"
+      }
+    }
+  },
+  "shape": {
+    "_comment": "Mask形状生成配置",
+    "_ref": "DiffTumor (CVPR 2024) §3.3 (P5) + §F.1 (P22)",
+    "method": "ellipsoid",
+    "axis_ratio_range": [
+      0.8,
+      1.2
+    ],
+    "volume_conservation": true,
+    "elastic_deformation": {
+      "_ref": "DiffTumor §F.1 (P22): 'elastic deformation'",
+      "enabled": true,
+      "alpha": 15,
+      "sigma": 3,
+      "description": "alpha 控制变形程度(越大变形越大)，sigma 控制位移场的平滑度(越大越平滑)"
+    },
+    "salt_noise": {
+      "_ref": "DiffTumor §F.1 (P22): 'salt-noise generation'",
+      "enabled": true,
+      "probability": 0.02,
+      "description": "在mask内部随机翻转此比例的体素，模拟内部纹理不规则"
+    },
+    "gaussian_filter": {
+      "_ref": "DiffTumor §F.1 (P22): 'Gaussian filtering'",
+      "enabled": true,
+      "sigma_mm": 0.5,
+      "description": "对mask边界做高斯平滑，sigma单位为mm"
+    },
+    "scaling_clipping": {
+      "_ref": "DiffTumor §F.1 (P22): 'scaling, and clipping'",
+      "enabled": true,
+      "value_range": [
+        0,
+        1
+      ],
+      "description": "最终裁剪到 {0, 1} 范围"
+    }
+  },
+  "placement": {
+    "_comment": "位置选择配置",
+    "strategy": "uniform",
+    "available_strategies": [
+      "uniform",
+      "distance_weighted",
+      "subregion"
+    ],
+    "margin": {
+      "_comment": "有效区域 = erode(organ_mask, margin)",
+      "feather_mm": 0.5,
+      "safety_mm": 1,
+      "description": "margin = max_tumor_radius + feather + safety，保证肿瘤不超出器官边界。减小margin以适应小器官(esophagus, pancreas)。"
+    },
+    "max_retries": 50,
+    "distance_weighted": {
+      "_comment": "distance_weighted 策略专属参数 (仅在 strategy='distance_weighted' 时生效)",
+      "alpha": 1.0,
+      "description": "prob ∝ distance^alpha, alpha>0偏中心, alpha=0退化为uniform"
+    }
+  },
+  "preprocessing": {
+    "_comment": "CT预处理参数",
+    "_ref": "DiffTumor (CVPR 2024) §E.2 (P21)",
+    "hu_min": -175,
+    "hu_max": 250,
+    "description": "CT HU值裁剪范围"
+  },
+  "output": {
+    "format": "nifti",
+    "dtype": "uint8",
+    "value_range": [
+      0,
+      1
+    ],
+    "compress": true,
+    "naming_pattern": "{organ_type}_{sample_id}.nii.gz",
+    "description": "输出文件为 .nii.gz 格式，uint8 编码，值域 {0, 1}"
+  },
+  "logging": {
+    "log_file": "output/real_ct/generation_log.json",
+    "stats_file": "output/real_ct/statistics.json",
+    "verbose": true,
+    "description": "生成日志记录每个sample的完整参数，统计文件汇总实际分布 vs 目标分布"
+  }
+}

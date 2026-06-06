@@ -1,0 +1,2906 @@
+[
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_000_t00",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 487467,
+    "size_category": "medium",
+    "radius_mm": 14.39,
+    "center_zyx": [
+      62,
+      53,
+      31
+    ],
+    "mask_volume_voxels": 11523,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_000_t00.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_001_t01",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 395679,
+    "size_category": "medium",
+    "radius_mm": 10.44,
+    "center_zyx": [
+      67,
+      35,
+      65
+    ],
+    "mask_volume_voxels": 3943,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_001_t01.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_002_t02",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 356683,
+    "size_category": "small",
+    "radius_mm": 6.29,
+    "center_zyx": [
+      71,
+      42,
+      52
+    ],
+    "mask_volume_voxels": 1216,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_002_t02.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_003_t03",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 417737,
+    "size_category": "medium",
+    "radius_mm": 15.28,
+    "center_zyx": [
+      65,
+      51,
+      81
+    ],
+    "mask_volume_voxels": 14989,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_003_t03.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_004_t04",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 354827,
+    "size_category": "large",
+    "radius_mm": 22.32,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_005_t05",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 376243,
+    "size_category": "medium",
+    "radius_mm": 17.54,
+    "center_zyx": [
+      63,
+      46,
+      51
+    ],
+    "mask_volume_voxels": 20211,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_005_t05.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_006_t06",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 405727,
+    "size_category": "small",
+    "radius_mm": 7.98,
+    "center_zyx": [
+      70,
+      35,
+      47
+    ],
+    "mask_volume_voxels": 1545,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_006_t06.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_007_t07",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 460711,
+    "size_category": "small",
+    "radius_mm": 7.97,
+    "center_zyx": [
+      42,
+      38,
+      48
+    ],
+    "mask_volume_voxels": 1905,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_007_t07.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_008_t08",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 438461,
+    "size_category": "medium",
+    "radius_mm": 18.34,
+    "center_zyx": [
+      73,
+      69,
+      52
+    ],
+    "mask_volume_voxels": 25111,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_008_t08.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_009_t09",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 363497,
+    "size_category": "large",
+    "radius_mm": 29.21,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 434561,
+    "size_category": "medium",
+    "radius_mm": 15.74,
+    "center_zyx": [
+      63,
+      66,
+      56
+    ],
+    "mask_volume_voxels": 15127,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_011_t11",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 355959,
+    "size_category": "small",
+    "radius_mm": 8.59,
+    "center_zyx": [
+      75,
+      68,
+      48
+    ],
+    "mask_volume_voxels": 2437,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_011_t11.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_012_t12",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 443929,
+    "size_category": "small",
+    "radius_mm": 7.59,
+    "center_zyx": [
+      64,
+      71,
+      33
+    ],
+    "mask_volume_voxels": 1983,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_012_t12.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 372965,
+    "size_category": "medium",
+    "radius_mm": 18.71,
+    "center_zyx": [
+      59,
+      61,
+      51
+    ],
+    "mask_volume_voxels": 25765,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_014_t14",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 384739,
+    "size_category": "medium",
+    "radius_mm": 10.17,
+    "center_zyx": [
+      79,
+      76,
+      43
+    ],
+    "mask_volume_voxels": 4018,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_014_t14.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_015_t15",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 435841,
+    "size_category": "medium",
+    "radius_mm": 14.68,
+    "center_zyx": [
+      76,
+      65,
+      45
+    ],
+    "mask_volume_voxels": 14001,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_015_t15.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_016_t16",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 380513,
+    "size_category": "small",
+    "radius_mm": 9.4,
+    "center_zyx": [
+      81,
+      65,
+      56
+    ],
+    "mask_volume_voxels": 2775,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_016_t16.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_017_t17",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 412849,
+    "size_category": "medium",
+    "radius_mm": 18.26,
+    "center_zyx": [
+      67,
+      53,
+      78
+    ],
+    "mask_volume_voxels": 22309,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_017_t17.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_018_t18",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 394779,
+    "size_category": "small",
+    "radius_mm": 5.14,
+    "center_zyx": [
+      85,
+      53,
+      57
+    ],
+    "mask_volume_voxels": 267,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_018_t18.nii.gz"
+  },
+  {
+    "organ_type": "liver_lesion",
+    "sample_id": "SYNTH_019_t19",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 397803,
+    "size_category": "small",
+    "radius_mm": 8.86,
+    "center_zyx": [
+      63,
+      60,
+      49
+    ],
+    "mask_volume_voxels": 3138,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\liver_lesion\\liver_lesion_SYNTH_019_t19.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_000_t00",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 74755,
+    "size_category": "medium",
+    "radius_mm": 17.48,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=22.5 voxels. Organ mask volume=74755 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=22.5 voxels, radius=17.5 voxels, organ_volume=74755 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_001_t01",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 74591,
+    "size_category": "small",
+    "radius_mm": 9.96,
+    "center_zyx": [
+      69,
+      101,
+      68
+    ],
+    "mask_volume_voxels": 2828,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_001_t01.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_002_t02",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 74115,
+    "size_category": "large",
+    "radius_mm": 35.7,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_003_t03",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 58443,
+    "size_category": "small",
+    "radius_mm": 7.59,
+    "center_zyx": [
+      64,
+      92,
+      66
+    ],
+    "mask_volume_voxels": 1996,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_003_t03.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_004_t04",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 66239,
+    "size_category": "large",
+    "radius_mm": 40.78,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_005_t05",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 70593,
+    "size_category": "small",
+    "radius_mm": 5.63,
+    "center_zyx": [
+      65,
+      95,
+      71
+    ],
+    "mask_volume_voxels": 605,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_005_t05.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_006_t06",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 78459,
+    "size_category": "small",
+    "radius_mm": 9.24,
+    "center_zyx": [
+      64,
+      83,
+      71
+    ],
+    "mask_volume_voxels": 2839,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_006_t06.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_007_t07",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 69965,
+    "size_category": "medium",
+    "radius_mm": 15.27,
+    "center_zyx": [
+      67,
+      85,
+      65
+    ],
+    "mask_volume_voxels": 17035,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_007_t07.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_008_t08",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 62691,
+    "size_category": "small",
+    "radius_mm": 8.62,
+    "center_zyx": [
+      65,
+      80,
+      66
+    ],
+    "mask_volume_voxels": 3678,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_008_t08.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_009_t09",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 66929,
+    "size_category": "small",
+    "radius_mm": 7.64,
+    "center_zyx": [
+      66,
+      99,
+      60
+    ],
+    "mask_volume_voxels": 1480,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_009_t09.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 74175,
+    "size_category": "medium",
+    "radius_mm": 10.07,
+    "center_zyx": [
+      65,
+      94,
+      59
+    ],
+    "mask_volume_voxels": 5240,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_011_t11",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 66679,
+    "size_category": "small",
+    "radius_mm": 6.52,
+    "center_zyx": [
+      59,
+      92,
+      61
+    ],
+    "mask_volume_voxels": 972,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_011_t11.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_012_t12",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 57913,
+    "size_category": "large",
+    "radius_mm": 35.62,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 69867,
+    "size_category": "small",
+    "radius_mm": 5.77,
+    "center_zyx": [
+      75,
+      96,
+      69
+    ],
+    "mask_volume_voxels": 495,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_014_t14",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 77573,
+    "size_category": "medium",
+    "radius_mm": 19.86,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=24.9 voxels. Organ mask volume=77573 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=24.9 voxels, radius=19.9 voxels, organ_volume=77573 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_015_t15",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 68151,
+    "size_category": "medium",
+    "radius_mm": 15.51,
+    "center_zyx": [
+      67,
+      86,
+      64
+    ],
+    "mask_volume_voxels": 15973,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_015_t15.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_016_t16",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 80581,
+    "size_category": "small",
+    "radius_mm": 9.58,
+    "center_zyx": [
+      60,
+      91,
+      68
+    ],
+    "mask_volume_voxels": 3744,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_016_t16.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_017_t17",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 82551,
+    "size_category": "large",
+    "radius_mm": 22.15,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_018_t18",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 71157,
+    "size_category": "medium",
+    "radius_mm": 10.18,
+    "center_zyx": [
+      68,
+      92,
+      64
+    ],
+    "mask_volume_voxels": 4271,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_018_t18.nii.gz"
+  },
+  {
+    "organ_type": "pancreatic_lesion",
+    "sample_id": "SYNTH_019_t19",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 78125,
+    "size_category": "small",
+    "radius_mm": 6.06,
+    "center_zyx": [
+      68,
+      93,
+      66
+    ],
+    "mask_volume_voxels": 708,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\pancreatic_lesion\\pancreatic_lesion_SYNTH_019_t19.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_000_t00",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 56821,
+    "size_category": "large",
+    "radius_mm": 45.64,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_001_t01",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 46975,
+    "size_category": "small",
+    "radius_mm": 5.22,
+    "center_zyx": [
+      54,
+      53,
+      67
+    ],
+    "mask_volume_voxels": 526,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_001_t01.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_002_t02",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 53807,
+    "size_category": "medium",
+    "radius_mm": 19.0,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=24.0 voxels. Organ mask volume=53807 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=24.0 voxels, radius=19.0 voxels, organ_volume=53807 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_003_t03",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 48401,
+    "size_category": "small",
+    "radius_mm": 7.36,
+    "center_zyx": [
+      58,
+      51,
+      53
+    ],
+    "mask_volume_voxels": 1525,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_003_t03.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_004_t04",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 58087,
+    "size_category": "medium",
+    "radius_mm": 11.75,
+    "center_zyx": [
+      53,
+      51,
+      62
+    ],
+    "mask_volume_voxels": 6409,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_004_t04.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_005_t05",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 60885,
+    "size_category": "small",
+    "radius_mm": 8.92,
+    "center_zyx": [
+      60,
+      39,
+      56
+    ],
+    "mask_volume_voxels": 3654,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_005_t05.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_006_t06",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 58731,
+    "size_category": "small",
+    "radius_mm": 8.52,
+    "center_zyx": [
+      62,
+      41,
+      55
+    ],
+    "mask_volume_voxels": 1529,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_006_t06.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_007_t07",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 52385,
+    "size_category": "medium",
+    "radius_mm": 17.7,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=22.7 voxels. Organ mask volume=52385 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=22.7 voxels, radius=17.7 voxels, organ_volume=52385 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_008_t08",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 50017,
+    "size_category": "small",
+    "radius_mm": 8.41,
+    "center_zyx": [
+      53,
+      48,
+      62
+    ],
+    "mask_volume_voxels": 2418,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_008_t08.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_009_t09",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 63035,
+    "size_category": "small",
+    "radius_mm": 9.55,
+    "center_zyx": [
+      50,
+      47,
+      64
+    ],
+    "mask_volume_voxels": 3359,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_009_t09.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 50589,
+    "size_category": "medium",
+    "radius_mm": 10.76,
+    "center_zyx": [
+      58,
+      47,
+      60
+    ],
+    "mask_volume_voxels": 4468,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_011_t11",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 42627,
+    "size_category": "large",
+    "radius_mm": 36.3,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_012_t12",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 57025,
+    "size_category": "small",
+    "radius_mm": 8.94,
+    "center_zyx": [
+      55,
+      49,
+      61
+    ],
+    "mask_volume_voxels": 2550,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_012_t12.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 51117,
+    "size_category": "small",
+    "radius_mm": 9.57,
+    "center_zyx": [
+      58,
+      46,
+      56
+    ],
+    "mask_volume_voxels": 3427,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_014_t14",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 48953,
+    "size_category": "medium",
+    "radius_mm": 17.34,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=22.3 voxels. Organ mask volume=48953 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=22.3 voxels, radius=17.3 voxels, organ_volume=48953 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_015_t15",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 53651,
+    "size_category": "medium",
+    "radius_mm": 14.32,
+    "center_zyx": [
+      59,
+      46,
+      60
+    ],
+    "mask_volume_voxels": 9904,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_015_t15.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_016_t16",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 50583,
+    "size_category": "large",
+    "radius_mm": 45.54,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_017_t17",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 44313,
+    "size_category": "small",
+    "radius_mm": 7.83,
+    "center_zyx": [
+      52,
+      49,
+      60
+    ],
+    "mask_volume_voxels": 2224,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_017_t17.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_018_t18",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 57505,
+    "size_category": "medium",
+    "radius_mm": 15.97,
+    "center_zyx": [
+      55,
+      48,
+      60
+    ],
+    "mask_volume_voxels": 14789,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\kidney_lesion\\kidney_lesion_SYNTH_018_t18.nii.gz"
+  },
+  {
+    "organ_type": "kidney_lesion",
+    "sample_id": "SYNTH_019_t19",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 55433,
+    "size_category": "large",
+    "radius_mm": 30.78,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_000_t00",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 89729,
+    "size_category": "small",
+    "radius_mm": 7.93,
+    "center_zyx": [
+      45,
+      46,
+      62
+    ],
+    "mask_volume_voxels": 1692,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_000_t00.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_001_t01",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 87033,
+    "size_category": "small",
+    "radius_mm": 6.12,
+    "center_zyx": [
+      55,
+      47,
+      66
+    ],
+    "mask_volume_voxels": 1024,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_001_t01.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_002_t02",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 99905,
+    "size_category": "medium",
+    "radius_mm": 16.92,
+    "center_zyx": [
+      48,
+      54,
+      66
+    ],
+    "mask_volume_voxels": 19139,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_002_t02.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_003_t03",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 80673,
+    "size_category": "medium",
+    "radius_mm": 19.91,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=24.9 voxels. Organ mask volume=80673 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=24.9 voxels, radius=19.9 voxels, organ_volume=80673 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_004_t04",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 87083,
+    "size_category": "large",
+    "radius_mm": 21.21,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_005_t05",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 93101,
+    "size_category": "medium",
+    "radius_mm": 14.78,
+    "center_zyx": [
+      54,
+      53,
+      63
+    ],
+    "mask_volume_voxels": 12289,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_005_t05.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_006_t06",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 87109,
+    "size_category": "medium",
+    "radius_mm": 16.32,
+    "center_zyx": [
+      47,
+      62,
+      64
+    ],
+    "mask_volume_voxels": 21103,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_006_t06.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_007_t07",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 87163,
+    "size_category": "small",
+    "radius_mm": 9.21,
+    "center_zyx": [
+      48,
+      63,
+      67
+    ],
+    "mask_volume_voxels": 3302,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_007_t07.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_008_t08",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 90021,
+    "size_category": "large",
+    "radius_mm": 35.37,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_009_t09",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 83511,
+    "size_category": "small",
+    "radius_mm": 5.85,
+    "center_zyx": [
+      55,
+      54,
+      68
+    ],
+    "mask_volume_voxels": 573,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_009_t09.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 83479,
+    "size_category": "small",
+    "radius_mm": 9.22,
+    "center_zyx": [
+      53,
+      54,
+      66
+    ],
+    "mask_volume_voxels": 3604,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_011_t11",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 100181,
+    "size_category": "small",
+    "radius_mm": 5.75,
+    "center_zyx": [
+      58,
+      42,
+      71
+    ],
+    "mask_volume_voxels": 784,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_011_t11.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_012_t12",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 73703,
+    "size_category": "medium",
+    "radius_mm": 11.42,
+    "center_zyx": [
+      44,
+      55,
+      67
+    ],
+    "mask_volume_voxels": 5373,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_012_t12.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 97157,
+    "size_category": "medium",
+    "radius_mm": 16.04,
+    "center_zyx": [
+      47,
+      59,
+      63
+    ],
+    "mask_volume_voxels": 19438,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_014_t14",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 79553,
+    "size_category": "small",
+    "radius_mm": 9.38,
+    "center_zyx": [
+      46,
+      42,
+      67
+    ],
+    "mask_volume_voxels": 3931,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_014_t14.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_015_t15",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 76629,
+    "size_category": "large",
+    "radius_mm": 24.74,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_016_t16",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 78659,
+    "size_category": "large",
+    "radius_mm": 48.13,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_017_t17",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 101777,
+    "size_category": "large",
+    "radius_mm": 41.96,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_018_t18",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 85817,
+    "size_category": "medium",
+    "radius_mm": 10.57,
+    "center_zyx": [
+      51,
+      61,
+      70
+    ],
+    "mask_volume_voxels": 6028,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_018_t18.nii.gz"
+  },
+  {
+    "organ_type": "colon_lesion",
+    "sample_id": "SYNTH_019_t19",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 76739,
+    "size_category": "medium",
+    "radius_mm": 12.98,
+    "center_zyx": [
+      43,
+      60,
+      66
+    ],
+    "mask_volume_voxels": 7603,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\colon_lesion\\colon_lesion_SYNTH_019_t19.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_000_t00",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 39891,
+    "size_category": "medium",
+    "radius_mm": 11.76,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=16.8 voxels. Organ mask volume=39891 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=16.8 voxels, radius=11.8 voxels, organ_volume=39891 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_001_t01",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 37383,
+    "size_category": "medium",
+    "radius_mm": 10.54,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=15.5 voxels. Organ mask volume=37383 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=15.5 voxels, radius=10.5 voxels, organ_volume=37383 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_002_t02",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 39665,
+    "size_category": "medium",
+    "radius_mm": 17.86,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=22.9 voxels. Organ mask volume=39665 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=22.9 voxels, radius=17.9 voxels, organ_volume=39665 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_003_t03",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 36735,
+    "size_category": "medium",
+    "radius_mm": 14.94,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=19.9 voxels. Organ mask volume=36735 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=19.9 voxels, radius=14.9 voxels, organ_volume=36735 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_004_t04",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 31599,
+    "size_category": "small",
+    "radius_mm": 9.71,
+    "center_zyx": [
+      72,
+      110,
+      80
+    ],
+    "mask_volume_voxels": 3157,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_004_t04.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_005_t05",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 34921,
+    "size_category": "small",
+    "radius_mm": 6.05,
+    "center_zyx": [
+      68,
+      111,
+      75
+    ],
+    "mask_volume_voxels": 910,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_005_t05.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_006_t06",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 43709,
+    "size_category": "medium",
+    "radius_mm": 14.72,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=19.7 voxels. Organ mask volume=43709 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=19.7 voxels, radius=14.7 voxels, organ_volume=43709 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_007_t07",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 40145,
+    "size_category": "small",
+    "radius_mm": 6.17,
+    "center_zyx": [
+      76,
+      112,
+      82
+    ],
+    "mask_volume_voxels": 1039,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_007_t07.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_008_t08",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 32423,
+    "size_category": "small",
+    "radius_mm": 5.39,
+    "center_zyx": [
+      78,
+      114,
+      81
+    ],
+    "mask_volume_voxels": 649,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_008_t08.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_009_t09",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 40681,
+    "size_category": "medium",
+    "radius_mm": 16.01,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=21.0 voxels. Organ mask volume=40681 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=21.0 voxels, radius=16.0 voxels, organ_volume=40681 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 36631,
+    "size_category": "small",
+    "radius_mm": 9.02,
+    "center_zyx": [
+      64,
+      110,
+      80
+    ],
+    "mask_volume_voxels": 2418,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_011_t11",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 36345,
+    "size_category": "large",
+    "radius_mm": 35.37,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_012_t12",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 40323,
+    "size_category": "large",
+    "radius_mm": 35.13,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 40941,
+    "size_category": "small",
+    "radius_mm": 6.4,
+    "center_zyx": [
+      64,
+      114,
+      80
+    ],
+    "mask_volume_voxels": 1216,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_014_t14",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 39783,
+    "size_category": "small",
+    "radius_mm": 5.35,
+    "center_zyx": [
+      59,
+      110,
+      80
+    ],
+    "mask_volume_voxels": 539,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_014_t14.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_015_t15",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 43657,
+    "size_category": "large",
+    "radius_mm": 28.25,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_016_t16",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 46733,
+    "size_category": "medium",
+    "radius_mm": 17.85,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=22.9 voxels. Organ mask volume=46733 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=22.9 voxels, radius=17.9 voxels, organ_volume=46733 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_017_t17",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 40671,
+    "size_category": "small",
+    "radius_mm": 7.89,
+    "center_zyx": [
+      73,
+      108,
+      80
+    ],
+    "mask_volume_voxels": 2155,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\esophagus_tumor\\esophagus_tumor_SYNTH_017_t17.nii.gz"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_018_t18",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 32429,
+    "size_category": "medium",
+    "radius_mm": 16.21,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=21.2 voxels. Organ mask volume=32429 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=21.2 voxels, radius=16.2 voxels, organ_volume=32429 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "esophagus_tumor",
+    "sample_id": "SYNTH_019_t19",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 37993,
+    "size_category": "medium",
+    "radius_mm": 19.97,
+    "error": "Cannot compute valid region for organ: Effective region is empty after eroding by margin=25.0 voxels. Organ mask volume=37993 voxels. Consider reducing tumor radius, feather, or safety margin.. margin=25.0 voxels, radius=20.0 voxels, organ_volume=37993 voxels.",
+    "error_type": "ValueError"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_000_t00",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 54839,
+    "size_category": "small",
+    "radius_mm": 5.54,
+    "center_zyx": [
+      39,
+      46,
+      69
+    ],
+    "mask_volume_voxels": 527,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_000_t00.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_001_t01",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 60533,
+    "size_category": "small",
+    "radius_mm": 9.88,
+    "center_zyx": [
+      37,
+      39,
+      62
+    ],
+    "mask_volume_voxels": 3079,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_001_t01.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_002_t02",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 57569,
+    "size_category": "medium",
+    "radius_mm": 10.6,
+    "center_zyx": [
+      46,
+      37,
+      60
+    ],
+    "mask_volume_voxels": 4441,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_002_t02.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_003_t03",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 61567,
+    "size_category": "medium",
+    "radius_mm": 12.69,
+    "center_zyx": [
+      39,
+      33,
+      62
+    ],
+    "mask_volume_voxels": 8875,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_003_t03.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_004_t04",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 57537,
+    "size_category": "medium",
+    "radius_mm": 13.79,
+    "center_zyx": [
+      43,
+      40,
+      67
+    ],
+    "mask_volume_voxels": 9054,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_004_t04.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_005_t05",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 59669,
+    "size_category": "large",
+    "radius_mm": 43.46,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_006_t06",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 62627,
+    "size_category": "medium",
+    "radius_mm": 15.5,
+    "center_zyx": [
+      41,
+      39,
+      64
+    ],
+    "mask_volume_voxels": 18049,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_006_t06.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_007_t07",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 53177,
+    "size_category": "small",
+    "radius_mm": 6.31,
+    "center_zyx": [
+      41,
+      47,
+      68
+    ],
+    "mask_volume_voxels": 1016,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_007_t07.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_008_t08",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 62195,
+    "size_category": "small",
+    "radius_mm": 9.65,
+    "center_zyx": [
+      37,
+      41,
+      60
+    ],
+    "mask_volume_voxels": 2784,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_008_t08.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_009_t09",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 72591,
+    "size_category": "small",
+    "radius_mm": 6.8,
+    "center_zyx": [
+      48,
+      44,
+      54
+    ],
+    "mask_volume_voxels": 1354,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_009_t09.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_010_t10",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 78371,
+    "size_category": "small",
+    "radius_mm": 6.3,
+    "center_zyx": [
+      51,
+      34,
+      61
+    ],
+    "mask_volume_voxels": 763,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_010_t10.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_011_t11",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 63115,
+    "size_category": "large",
+    "radius_mm": 36.32,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_012_t12",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 61061,
+    "size_category": "medium",
+    "radius_mm": 16.59,
+    "center_zyx": [
+      40,
+      42,
+      65
+    ],
+    "mask_volume_voxels": 25175,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_012_t12.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_013_t13",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 62833,
+    "size_category": "small",
+    "radius_mm": 9.15,
+    "center_zyx": [
+      41,
+      47,
+      57
+    ],
+    "mask_volume_voxels": 2434,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_013_t13.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_014_t14",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 63589,
+    "size_category": "small",
+    "radius_mm": 5.02,
+    "center_zyx": [
+      43,
+      51,
+      75
+    ],
+    "mask_volume_voxels": 533,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_014_t14.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_015_t15",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 63435,
+    "size_category": "small",
+    "radius_mm": 9.31,
+    "center_zyx": [
+      39,
+      42,
+      67
+    ],
+    "mask_volume_voxels": 3423,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_015_t15.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_016_t16",
+    "success": false,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 58635,
+    "size_category": "large",
+    "radius_mm": 43.36,
+    "error": "",
+    "error_type": "MemoryError"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_017_t17",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 67051,
+    "size_category": "medium",
+    "radius_mm": 15.76,
+    "center_zyx": [
+      39,
+      42,
+      60
+    ],
+    "mask_volume_voxels": 17234,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_017_t17.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_018_t18",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 71645,
+    "size_category": "small",
+    "radius_mm": 7.95,
+    "center_zyx": [
+      34,
+      51,
+      68
+    ],
+    "mask_volume_voxels": 2480,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_018_t18.nii.gz"
+  },
+  {
+    "organ_type": "endometrioma_tumor",
+    "sample_id": "SYNTH_019_t19",
+    "success": true,
+    "ct_shape": [
+      128,
+      160,
+      160
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "organ_volume": 49843,
+    "size_category": "small",
+    "radius_mm": 8.62,
+    "center_zyx": [
+      39,
+      41,
+      54
+    ],
+    "mask_volume_voxels": 2383,
+    "validation_passed": true,
+    "output_path": "C:\\Users\\33067\\.claude\\work\\Mask\\output\\endometrioma_tumor\\endometrioma_tumor_SYNTH_019_t19.nii.gz"
+  }
+]
