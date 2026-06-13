@@ -1,0 +1,22 @@
+{
+  "_guide": {
+    "organ": "liver | pancreas | kidney | colon | esophagus | uterus",
+    "size_category": "tiny | small | medium | large",
+    "phase": "early | noearly | null for auto",
+    "output": "both | full_ct | patch_96",
+    "repeat": "copies of this task with different masks"
+  },
+
+  "tasks": [
+    {"organ": "liver",     "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"},
+    {"organ": "pancreas",  "size_category": "small",  "host_ct": null, "phase": "early", "output": "both"},
+    {"organ": "kidney",    "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"},
+    {"organ": "colon",     "size_category": "small",  "host_ct": null, "phase": "early", "output": "both"},
+    {"organ": "esophagus", "size_category": "tiny",   "host_ct": null, "phase": "early", "output": "both"},
+    {"organ": "uterus",    "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"}
+  ],
+
+  "global": {
+    "device": "cpu"
+  }
+}

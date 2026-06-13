@@ -1,0 +1,20 @@
+# Weights (1.7GB — download separately from HuggingFace)
+checkpoints/
+
+# Generated outputs
+output/
+
+# Training artifacts
+trained_weights/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# Temp
+*.tmp

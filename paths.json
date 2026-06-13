@@ -1,0 +1,15 @@
+{
+  "__README__": "=== Tumor 项目外部路径配置 === 换机器时只需修改此文件。内部路径 (checkpoints/, output/, trained_weights/) 自动相对项目根目录解析，无需配置。",
+
+  "mask_project_dir": "C:/Users/33067/.claude/work/Mask",
+  "__mask_project_dir__": "Mask 项目根目录。其下应有: data/ct/{BDMAP_ID}/ct.nii.gz (宿主CT), data/organ_labels/{BDMAP_ID}/segmentations/ (器官分割), output/real_ct/{organ}/ (肿瘤mask)。获取方式: 运行 Mask 项目的完整管线生成，或从已有拷贝复制。",
+
+  "diffumor_repo_dir": "D:/Users/33067/claude-data/DiffTumor/STEP3.SegmentationModel",
+  "__diffumor_repo_dir__": "DiffTumor GitHub 仓库的本地克隆路径。其下应有 TumorGeneration/ldm/ddpm/ (UNet/Diffusion 模型定义) 和 TumorGeneration/ldm/vq_gan_3d/ (VQGAN 模型定义)。获取方式: git clone https://github.com/MrGiovanni/DiffTumor，指向其中的 STEP3.SegmentationModel 子目录。",
+
+  "data_download_dir": "D:/Users/33067/claude-data/downloads",
+  "__data_download_dir__": "训练数据和下载文件的存储目录。其下应有: colon_train_data/ (MSD-Colon 126例 + 预处理的训练对), AbdomenAtlas2.0Mini_label/ (可选，标签备份)。获取方式: 运行 train_colon.py 前按 训练新器官权重_完整步骤.md 准备数据，或从已有拷贝复制。",
+
+  "temp_dir": "D:/Users/33067/claude-data/downloads/_tmp",
+  "__temp_dir__": "临时文件目录，用于存放预处理中间文件 (带正确 spacing 的临时 NIfTI)。任意可写路径即可，建议放在 SSD 上以加速 SimpleITK I/O。程序会自动创建此目录。"
+}
