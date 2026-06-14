@@ -213,10 +213,10 @@ run example_prompts.json    # 跑一遍参考示例
 
 ## 五、生成新 Mask（可选）
 
-`mask_config.json` 控制是否调用 Mask 工程生成新的肿瘤 mask。默认 `"generate": false`，不生成。
+`mask_config.json` 控制 Mask 工程生成新的肿瘤 mask。
 
 ```bash
-# 1. 编辑 mask_config.json，设 "generate": true
+# 1. 编辑 mask_config.json
 # 2. 运行
 .\run mask_config.json
 ```

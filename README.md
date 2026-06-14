@@ -8,8 +8,8 @@
 # 生成肿瘤 (需要已有 mask)
 .\run prompts.json
 
-# 生成新 mask (可选——默认不生成)
-# 编辑 mask_config.json, 设 "generate": true, 然后:
+# 生成新 mask (可选)
+# 编辑 mask_config.json, 然后:
 .\run mask_config.json
 ```
 

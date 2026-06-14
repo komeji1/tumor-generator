@@ -109,10 +109,6 @@ def main(config_path=None):
 
     mask_cfg = json.load(open(cfg_path, "r", encoding="utf-8"))
 
-    if not mask_cfg.get("generate", False):
-        print("generate=false, skipping mask generation.")
-        return
-
     # Import Mask project modules
     for step in ['Step0', 'Step1', 'Step2', 'Step3', 'Step4', 'Step5']:
         step_src = os.path.join(MASK_PROJECT_DIR, step, 'src')

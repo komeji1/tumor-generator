@@ -463,8 +463,8 @@ def main():
             print(f"  {e}")
             return
 
-        # Auto-detect config type: "generate" → mask, "tasks" → tumor
-        if "generate" in config or "organs" in config and "tasks" not in config:
+        # Auto-detect config type: "organs" (no "tasks") → mask, "tasks" → tumor
+        if "organs" in config and "tasks" not in config:
             from run_mask_gen import main as run_mask
             run_mask(args.config)
         else:
