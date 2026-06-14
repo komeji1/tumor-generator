@@ -7,7 +7,7 @@
     "naming": "null = default ({organ}_t{NN}__{BDMAP_ID}), or custom string with {organ}/{index}/{bdmap} placeholders"
   },
 
-  "generate": true,
+  "generate": false,
 
   "naming": null,
 
