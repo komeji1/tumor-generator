@@ -1,0 +1,17 @@
+{
+  "_guide": {
+    "generate": "true to generate new masks, false to skip (default)",
+    "organs": "which organs to generate masks for",
+    "count": "how many masks per organ",
+    "size_mix": "tiny | small | medium | large — comma-separated, or 'all'",
+    "naming": "null = default ({organ}_t{NN}__{BDMAP_ID}), or custom string with {organ}/{index}/{bdmap} placeholders"
+  },
+
+  "generate": true,
+
+  "naming": null,
+
+  "organs": [
+    {"organ": "liver", "count": 2, "size_mix": "medium,small", "naming": "hello"}
+  ]
+}

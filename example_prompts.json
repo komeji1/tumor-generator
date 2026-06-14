@@ -1,67 +1,46 @@
 {
-  "_description": "肿瘤生成提示词配置 — 依据 AI肿瘤生成提示词设计分析.md",
-  "_guide": {
-    "organ": "liver | pancreas | kidney | colon | esophagus | uterus",
-    "size_category": "tiny(1-5mm) | small(5-10mm) | medium(10-20mm) | large(20-50mm)",
-    "host_ct": "BDMAP_XXXXXXXX 或 null(随机)",
-    "phase": "early(T=4 DDPM) | noearly(T=200 DDIM) | null(自动按size选择)",
-    "output": "full_ct(嵌入全CT) | patch_96(96³方块) | both",
-    "mask_index": "同器官同CT的第N个mask (0起)",
-    "output_name": "自定义输出文件名 (可选)"
+  "_how_to_use": "复制为 prompts.json, 删掉不需要的任务, 运行: .\\run prompts.json",
+
+  "_field_reference": {
+    "organ":         "liver | pancreas | kidney | colon | esophagus | uterus",
+    "size_category": "tiny(≤5mm/T=4) | small(5-10mm/T=4) | medium(10-20mm/T=200) | large(>20mm/T=200)。注意: 现在真的按物理尺寸筛选mask, 找不到自动降级",
+    "phase":         "null=按论文自动(tiny/small→early, medium/large→noearly) | 也可手动指定 early/noearly",
+    "host_ct":       "BDMAP_XXXXXXXX | null=随机CT+随机mask",
+    "mask_index":    "指定第N个mask | 不设=随机",
+    "mask_file":     "直接指定mask文件名(最高优先级) | null",
+    "output":        "both=full_ct+96³patch | full_ct | patch_96",
+    "output_name":   "自定义文件名 | null=自动命名",
+    "repeat":        "同任务重复几次(每次选不同mask)",
+    "eta":           "DDIM随机性: 0=确定性(论文默认) | 1=最大随机性。仅noearly(medium/large)生效, early总是随机的"
   },
 
   "tasks": [
-
     {
-      "_comment": "肝脏中等肿瘤 — 用noearly权重生成更明显的变化",
+      "_what":  "肝脏大肿瘤×2 — noearly(T=200) + eta=1随机, 每次不同mask不同纹理",
       "organ": "liver",
-      "size_category": "medium",
-      "host_ct": "BDMAP_00000012",
-      "mask_index": 0,
-      "phase": "noearly",
-      "output": "full_ct"
+      "size_category": "large",
+      "repeat": 2,
+      "eta": 1
     },
-
     {
-      "_comment": "胰腺小肿瘤 — auto选early权重",
+      "_what":  "胰腺小肿瘤×2 — early(T=4)确定性, 自动降级到small(胰腺无large)",
       "organ": "pancreas",
-      "size_category": "small",
-      "host_ct": "BDMAP_00000019",
-      "mask_index": 0,
-      "phase": null,
-      "output": "full_ct"
+      "size_category": "large",
+      "repeat": 2,
+      "eta": 0
     },
-
     {
-      "_comment": "肾脏小肿瘤",
-      "organ": "kidney",
-      "size_category": "small",
-      "host_ct": "BDMAP_00000019",
-      "mask_index": 2,
-      "phase": null,
-      "output": "full_ct"
-    },
-
-    {
-      "_comment": "食管微小肿瘤 — zero-shot用liver_early",
+      "_what":  "食管微小肿瘤 — tiny(T=4), zero-shot, 指定mask文件",
       "organ": "esophagus",
       "size_category": "tiny",
-      "host_ct": null,
-      "mask_index": 0,
-      "phase": "early",
-      "output": "full_ct"
+      "mask_file": "esophagus_tumor_t00__BDMAP_00000012.nii.gz"
     },
-
     {
-      "_comment": "子宫小肿瘤 — zero-shot用liver_early",
-      "organ": "uterus",
-      "size_category": "small",
-      "host_ct": null,
-      "mask_index": 0,
-      "phase": null,
-      "output": "full_ct"
+      "_what":  "结肠大肿瘤 — 自有权重(colon_early.pt), 对比度最高",
+      "organ": "colon",
+      "size_category": "large",
+      "eta": 1
     }
-
   ],
 
   "global": {

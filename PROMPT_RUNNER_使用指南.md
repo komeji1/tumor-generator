@@ -65,7 +65,9 @@ run prompts.json
 | `host_ct` | string / null | — | `null` (随机) | 宿主 CT 的 BDMAP ID |
 | `mask_index` | int | — | `0` | 同器官/CT 下的第 N 个 mask |
 | `mask_file` | string | — | `null` | 直接指定 mask 文件名 (最高优先级) |
-| `output` | string | — | `"full_ct"` | 输出格式 |
+| `repeat` | int | — | `1` | 同一任务重复次数（每次用不同 mask_index） |
+| `output` | string | — | `"both"` | 输出格式 |
+| `eta` | float | — | `0.0` | DDIM 随机性: 0=确定性(论文默认), 1=最大随机。仅 noearly 生效 |
 | `output_name` | string | — | `null` (自动) | 自定义输出文件名 |
 
 ### 2.3 字段可选值
@@ -209,7 +211,19 @@ run example_prompts.json    # 跑一遍参考示例
 
 ---
 
-## 五、辅助命令
+## 五、生成新 Mask（可选）
+
+`mask_config.json` 控制是否调用 Mask 工程生成新的肿瘤 mask。默认 `"generate": false`，不生成。
+
+```bash
+# 1. 编辑 mask_config.json，设 "generate": true
+# 2. 运行
+.\run mask_config.json
+```
+
+新 mask 保存到 `Mask/output/real_ct/{organ}/`，之后在 `prompts.json` 中通过 `mask_file` 字段引用。
+
+## 六、辅助命令
 
 ```bash
 # 查看可用资源 (mask数量、CT分布、权重状态)
@@ -224,7 +238,7 @@ run --quick --organ liver --size medium --host BDMAP_00000012
 
 ---
 
-## 六、原理简述
+## 七、原理简述
 
 DiffTumor 的实际条件编码是 `cond = concat([z_healthy, mask_downsampled])`。Mask **隐式编码了位置+形状+尺寸+边界**，CT 上下文**隐式编码了器官类型+HU 纹理**。JSON 中的高层语义字段 (organ/size/host) 通过 Prompt Runner 映射到这些底层输入——不需要用户理解 VQGAN 或 DDIM：
 
@@ -239,7 +253,7 @@ mask_index: 0       →  Mask文件选取               →  tumor_mask.nii.gz
 
 ---
 
-## 七、可移植性
+## 八、可移植性
 
 换机器只需修改 `paths.json` 中的 4 行外部路径，内部路径 (`checkpoints/`, `output/`) 自动相对项目根目录解析。
 

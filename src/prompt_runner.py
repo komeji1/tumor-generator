@@ -12,7 +12,7 @@
 设计依据: AI肿瘤生成提示词设计分析.md §八 + DiffTumor 实际条件编码
 """
 
-import sys, os, time, json, glob, re, argparse, random, textwrap
+import sys, os, time, json, glob, re, argparse, random, textwrap, warnings
 import numpy as np, nibabel as nib
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -46,11 +46,12 @@ ORGAN_WEIGHT = {
     "uterus": ("liver_early.pt", "liver_early.pt"),    # 零样本
 }
 SIZE_CATEGORIES = {
-    "tiny":   {"r_mm": [1, 5],   "phase": "early"},
-    "small":  {"r_mm": [5, 10],  "phase": "early"},
-    "medium": {"r_mm": [10, 20], "phase": "noearly"},
-    "large":  {"r_mm": [20, 50], "phase": "noearly"},
+    "tiny":   {"r_mm": [1, 5],   "max_vox": 524,   "phase": "early"},
+    "small":  {"r_mm": [5, 10],  "max_vox": 4189,  "phase": "early"},
+    "medium": {"r_mm": [10, 20], "max_vox": 33510, "phase": "noearly"},
+    "large":  {"r_mm": [20, 50], "max_vox": 999999,"phase": "noearly"},
 }
+# max_vox: approximate max voxel count at 1mm³ for sphere radius = r_max
 OUTPUT_FORMATS = ["full_ct", "patch_96", "both"]
 
 
@@ -61,28 +62,61 @@ OUTPUT_FORMATS = ["full_ct", "patch_96", "both"]
 
 def resolve_mask(organ: str, bdmap_id: str = None, size_category: str = None,
                  mask_index: int = 0, mask_file: str = None) -> str:
-    """根据条件解析/选择肿瘤 mask 文件路径"""
+    """根据条件解析/选择肿瘤 mask 文件路径。size_category 过滤只选对应尺寸的 mask。"""
     mask_dir = os.path.join(MASK_DIR, ORGAN_TYPE_MAP[organ])
 
     if mask_file:
-        # 直接指定文件
         path = os.path.join(mask_dir, mask_file)
         if os.path.exists(path):
             return path
         raise FileNotFoundError(f"Mask not found: {path}")
 
-    # 按条件筛选
     all_masks = sorted(glob.glob(os.path.join(mask_dir, "*.nii.gz")))
     if not all_masks:
         raise FileNotFoundError(f"No masks found in {mask_dir}")
-
     candidates = all_masks
+
+    # 按 size_category 过滤 — 找不到则自动降级
+    if size_category and size_category in SIZE_CATEGORIES:
+        keys = list(SIZE_CATEGORIES.keys())
+        cat_idx = keys.index(size_category)
+        index_file = os.path.join(MASK_DIR, "mask_size_index.json")
+        org_key = ORGAN_TYPE_MAP[organ]
+        idx_data = None
+        if os.path.exists(index_file):
+            try:
+                idx_data = json.load(open(index_file, "r", encoding="utf-8"))
+            except Exception:
+                pass
+        # Try requested size, then downgrade
+        for attempt in range(cat_idx + 1):
+            cat = keys[cat_idx - attempt]
+            max_vox = SIZE_CATEGORIES[cat]["max_vox"]
+            min_vox = SIZE_CATEGORIES[keys[cat_idx - attempt - 1]]["max_vox"] if cat_idx - attempt > 0 else 0
+            sized = []
+            if idx_data:
+                sized = [m for m in candidates if any(
+                    min_vox < info.get("voxels", 0) <= max_vox
+                    for name, info in idx_data.get(org_key, {}).items()
+                    if m.endswith(name))]
+            else:
+                for m in candidates:
+                    try:
+                        n = int((nib.load(m).get_fdata() > 0).sum())
+                        if min_vox < n <= max_vox:
+                            sized.append(m)
+                    except Exception:
+                        pass
+            if sized:
+                if cat != size_category:
+                    print(f"  NOTE: no {size_category} masks for {organ}, downgraded to {cat}")
+                candidates = sized
+                break
 
     # 按 BDMAP ID 筛选
     if bdmap_id:
         candidates = [m for m in candidates if bdmap_id in os.path.basename(m)]
         if not candidates:
-            # 列出哪些 BDMAP 有此器官的 mask
             avail = sorted(set(
                 re.search(r'BDMAP_(\d{8})', os.path.basename(m)).group(0)
                 for m in all_masks
@@ -94,7 +128,6 @@ def resolve_mask(organ: str, bdmap_id: str = None, size_category: str = None,
                 f"  Tip: set \"host_ct\": null for random selection"
             )
 
-    # 按 mask index 选择
     if mask_index >= len(candidates):
         mask_index = mask_index % len(candidates)
     return candidates[mask_index]
@@ -158,11 +191,14 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
 
     t_start = time.time()
 
-    # 1. 解析 mask
+    # 1. 解析 mask (host_ct=null 时随机 mask_index)
+    mask_idx = task.get("mask_index", 0)
+    if bdmap_id is None and "mask_index" not in task:
+        mask_idx = random.randint(0, 99)  # random, not always largest
     mask_path = resolve_mask(
         organ, bdmap_id=bdmap_id,
         size_category=size_cat,
-        mask_index=task.get("mask_index", 0),
+        mask_index=mask_idx,
         mask_file=task.get("mask_file"),
     )
 
@@ -181,8 +217,9 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
               "phase": phase, "mask_path": mask_path, "mask_voxels": n_vox}
 
     try:
+        eta = task.get("eta", 0.0)
         fc, fm, aff, meta = embed_tumor_full_ct(
-            ct_path, og_path, mask_path, organ_type, device, phase, output_fmt)
+            ct_path, og_path, mask_path, organ_type, device, phase, output_fmt, eta=eta)
 
         base = os.path.basename(mask_path).replace(".nii.gz", "")
         base = re.sub(r'_t(\d)', r'_s\1', base)  # _t00→_s00, won't corrupt "tumor"
@@ -197,13 +234,18 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
         if output_fmt in ("patch_96", "both") and "patch_96_hu" in meta:
             patch_dir = os.path.join(PATCH_96_DIR, organ_type)
             os.makedirs(patch_dir, exist_ok=True)
-            patch_aff = np.diag([1.0, 1.0, 1.0, 1.0])  # 1mm^3 isotropic
-            nib.save(nib.Nifti1Image(meta["patch_96_hu"].astype(np.float32), patch_aff),
-                     os.path.join(patch_dir, f"{base}.nii.gz"))
-            nib.save(nib.Nifti1Image(fm.astype(np.uint8) if fm.sum() > 0 else np.zeros_like(fm),
-                                     patch_aff),
-                     os.path.join(patch_dir, f"{base}_mask.nii.gz"))
-            out_paths.append(os.path.join(patch_dir, f"{base}.nii.gz"))
+            patch_aff = np.diag([1.0, 1.0, 1.0, 1.0])
+            patch_path = os.path.join(patch_dir, f"{base}.nii.gz")
+            v = 2
+            while os.path.exists(patch_path):
+                patch_path = os.path.join(patch_dir, f"{base}_v{v}.nii.gz")
+                v += 1
+            nib.save(nib.Nifti1Image(meta["patch_96_hu"].astype(np.float32), patch_aff), patch_path)
+            base_mask = os.path.join(patch_dir, f"{base}_mask.nii.gz")
+            if not os.path.exists(base_mask):
+                patch_mask = meta.get("patch_96_mask", np.zeros((96, 96, 96), dtype=np.uint8))
+                nib.save(nib.Nifti1Image(patch_mask, patch_aff), base_mask)
+            out_paths.append(patch_path)
 
         dt = time.time() - t_start
         t_hu = fc[fm > 0] if fm.sum() > 0 else np.array([0])
@@ -291,9 +333,11 @@ def run_config(config: dict) -> list:
     expanded = []
     for task in tasks:
         n = max(1, task.get("repeat", 1))
+        user_set_idx = "mask_index" in task
         for j in range(n):
             t = dict(task)
-            t["mask_index"] = task.get("mask_index", 0) + j
+            if user_set_idx:
+                t["mask_index"] = task["mask_index"] + j
             t.pop("repeat", None)
             expanded.append(t)
 
@@ -418,7 +462,13 @@ def main():
             print(f"ERROR: Invalid JSON in {args.config}")
             print(f"  {e}")
             return
-        run_config(config)
+
+        # Auto-detect config type: "generate" → mask, "tasks" → tumor
+        if "generate" in config or "organs" in config and "tasks" not in config:
+            from run_mask_gen import main as run_mask
+            run_mask(args.config)
+        else:
+            run_config(config)
     else:
         parser.print_help()
 

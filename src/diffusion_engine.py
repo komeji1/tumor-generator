@@ -136,17 +136,20 @@ class DiffusionEngine:
             self.ddim_sampler = DDIMSampler(self.diffusion, schedule="cosine")
             self.tester = None
 
-    def generate(self, cond: torch.Tensor) -> torch.Tensor:
+    def generate(self, cond: torch.Tensor, seed: int = None, eta: float = 0.0) -> torch.Tensor:
         """
         执行扩散采样 + VQGAN解码。
 
         Args:
-            cond: (B, 9, D_lat, H_lat, W_lat) 条件向量 (来自 ConditionBuilder)
+            cond: (B, 9, D_lat, H_lat, W_lat) 条件向量
+            seed: 随机种子 (None=每次不同, 指定=可复现)
+            eta: DDIM 随机性 (0=确定性/论文默认, 1=最大随机性, 仅 noearly 有效)
 
         Returns:
-            synthetic: (B, 1, W, D, H) 生成肿瘤纹理, 值域 [-1, 1]
-                       (注意轴约定: (B,C,W,D,H) — DiffTumor源码排列)
+            synthetic: (B, 1, D, H, W) 合成肿瘤纹理, 值域 [-1, 1]
         """
+        if seed is not None:
+            torch.manual_seed(seed)
         cond = cond.to(self.device)
         batch_size = cond.shape[0]
 
@@ -164,6 +167,7 @@ class DiffusionEngine:
                     conditioning=cond,
                     batch_size=batch_size,
                     shape=shape,
+                    eta=eta,
                     verbose=False,
                 )
                 # 反归一化 + VQGAN decode

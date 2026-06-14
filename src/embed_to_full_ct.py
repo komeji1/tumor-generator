@@ -31,6 +31,7 @@ def embed_tumor_full_ct(
     device: str = "cpu",
     phase: str = "early",
     output_mode: str = "both",
+    eta: float = 0.0,
 ) -> tuple:
     """
     Generate synthetic tumor and embed into full CT.
@@ -38,9 +39,9 @@ def embed_tumor_full_ct(
     Args:
         phase: "early" (T=4 DDPM) or "noearly" (T=200 DDIM S=50)
         output_mode: "full_ct" | "patch_96" | "both"
+        eta: DDIM stochasticity, 0=deterministic, 1=max diversity (noearly only)
 
     Returns: (full_ct_native, tumor_mask_native, affine, meta)
-      meta includes "patch_96_hu" (96^3 numpy array in HU) when output_mode includes patch_96
     """
     oshort = {"liver_lesion":"liver","pancreatic_lesion":"pancreas",
               "kidney_lesion":"kidney","colon_lesion":"colon",
@@ -106,7 +107,7 @@ def embed_tumor_full_ct(
     builder = ConditionBuilder(VQGAN_CKPT, device)
     cond = builder.build(ct_t, tm_t)
     engine = DiffusionEngine(VQGAN_CKPT, DIFFUSION_DIR, oshort, phase, device)
-    synthetic = engine.generate(cond)
+    synthetic = engine.generate(cond, eta=eta)
 
     # -- Step 5: Blend (paper formula, fixed sigma for demo) --
     blender = TextureBlender(device)
@@ -152,18 +153,27 @@ def embed_tumor_full_ct(
     }
     if output_mode in ("patch_96", "both"):
         meta["patch_96_hu"] = blended_hu.copy()  # (96,96,96) HU, 1mm^3 isotropic
+        meta["patch_96_mask"] = tm_t[0, 0].cpu().numpy().astype(np.uint8)  # (96,96,96) binary
     return final_ct, full_mask, affine, meta
 
 
 def save_full_ct(final_ct, full_mask, affine, organ_type, base_name, out_root=None):
-    """Save full-CT output"""
+    """Save full-CT output. If file exists, append _v2, _v3... instead of overwriting."""
     d = os.path.join(out_root or FULL_CT_DIR, organ_type)
     os.makedirs(d, exist_ok=True)
-    nib.save(nib.Nifti1Image(final_ct.astype(np.float32), affine),
-             os.path.join(d, f"{base_name}.nii.gz"))
-    nib.save(nib.Nifti1Image(full_mask.astype(np.uint8), affine),
-             os.path.join(d, f"{base_name}_mask.nii.gz"))
-    return os.path.join(d, f"{base_name}.nii.gz")
+    path = os.path.join(d, f"{base_name}.nii.gz")
+    # Auto-version: don't overwrite
+    v = 2
+    while os.path.exists(path):
+        path = os.path.join(d, f"{base_name}_v{v}.nii.gz")
+        v += 1
+    nib.save(nib.Nifti1Image(final_ct.astype(np.float32), affine), path)
+    # Check base mask path (not versioned), skip if exists
+    base_mask = os.path.join(d, f"{base_name}_mask.nii.gz")
+    if not os.path.exists(base_mask):
+        nib.save(nib.Nifti1Image(full_mask.astype(np.uint8), affine),
+                 path.replace(".nii.gz", "_mask.nii.gz"))
+    return path
 
 
 if __name__ == "__main__":

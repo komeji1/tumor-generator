@@ -1,19 +1,18 @@
 {
   "_guide": {
     "organ": "liver | pancreas | kidney | colon | esophagus | uterus",
-    "size_category": "tiny | small | medium | large",
-    "phase": "early | noearly | null for auto",
-    "output": "both | full_ct | patch_96",
-    "repeat": "copies of this task with different masks"
+    "size_category": "tiny(T=4) | small(T=4) | medium(T=200) | large(T=200)",
+    "phase": "null=按论文自动: tiny/small→early, medium/large→noearly",
+    "eta": "0=确定性(论文默认) | 1=最大随机性 | 仅noearly有效"
   },
 
   "tasks": [
-    {"organ": "liver",     "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"},
-    {"organ": "pancreas",  "size_category": "small",  "host_ct": null, "phase": "early", "output": "both"},
-    {"organ": "kidney",    "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"},
-    {"organ": "colon",     "size_category": "small",  "host_ct": null, "phase": "early", "output": "both"},
-    {"organ": "esophagus", "size_category": "tiny",   "host_ct": null, "phase": "early", "output": "both"},
-    {"organ": "uterus",    "size_category": "medium", "host_ct": null, "phase": "early", "output": "both"}
+    {"organ": "liver",     "size_category": "large",  "mask_file": "liver_lesion_t08__BDMAP_00000005.nii.gz", "repeat": 2, "eta": 1},
+    {"organ": "pancreas",  "size_category": "small",  "repeat": 2, "eta": 0},
+    {"organ": "kidney",    "size_category": "large",  "repeat": 2, "eta": 1},
+    {"organ": "colon",     "size_category": "large",  "repeat": 2, "eta": 1},
+    {"organ": "esophagus", "size_category": "tiny",   "repeat": 2, "eta": 0},
+    {"organ": "uterus",    "size_category": "large",  "repeat": 2, "eta": 1}
   ],
 
   "global": {

@@ -5,16 +5,20 @@
 ## 快速开始
 
 ```bash
-# 1. 编辑 prompts.json
-# 2. 运行
+# 生成肿瘤 (需要已有 mask)
 .\run prompts.json
+
+# 生成新 mask (可选——默认不生成)
+# 编辑 mask_config.json, 设 "generate": true, 然后:
+.\run mask_config.json
 ```
 
 输出：
 ```
 output/
 ├── full_ct/{organ}/        ← 完整 CT，仅肿瘤区被合成纹理替换
-└── synthetic_ct/{organ}/   ← 96³ patch (1mm³ 各向同性)
+├── synthetic_ct/{organ}/   ← 96³ patch (1mm³ 各向同性)
+└── tumor_labels/{organ}/   ← 肿瘤 mask
 ```
 
 ## 项目结构
@@ -23,15 +27,17 @@ output/
 Tumor/
 ├── config.py                  ← 路径解析器（自动检测项目根目录）
 ├── paths.json                 ← 外部路径配置（换机器只改这个）
-├── prompts.json               ← ★ 你的工作配置文件
+├── prompts.json               ← ★ 肿瘤生成的工作配置
 ├── example_prompts.json       ← 参考示例（不要改）
+├── mask_config.json           ← ★ Mask 生成配置（默认不生成）
 ├── requirements.txt           ← Python 依赖
 ├── run.bat                    ← Windows 启动脚本（自动找 Python）
 ├── PROMPT_RUNNER_使用指南.md   ← 完整使用文档
 ├── README.md                  ← 本文件
 │
 ├── src/                       ← 源代码
-│   ├── prompt_runner.py       ← 主入口：JSON/CLI 双接口
+│   ├── prompt_runner.py       ← 主入口：JSON/CLI 双接口，自动识别 tumor/mask 配置
+│   ├── run_mask_gen.py         ← Mask 生成桥接（调 Mask 项目管线）
 │   ├── embed_to_full_ct.py    ← 全 CT 肿瘤嵌入（核心管线）
 │   ├── main.py                ← 批量 96³ patch 生成
 │   ├── batch_full_ct.py       ← 批量全 CT 生成
@@ -77,12 +83,15 @@ Tumor/
 | 字段 | 说明 | 可选值 | 默认 |
 |------|------|------|:--:|
 | `organ` | 器官 | liver/pancreas/kidney/colon/esophagus/uterus | — |
-| `size_category` | 肿瘤尺寸 | tiny/small/medium/large | small |
+| `size_category` | 肿瘤尺寸（按物理大小筛mask，找不到自动降级） | tiny/small/medium/large | small |
 | `phase` | 采样策略 | early/noearly/null(自动) | null |
 | `host_ct` | 宿主 CT | BDMAP_XXXXXXXX/null(随机) | null |
 | `mask_index` | 第 N 个 mask | 0,1,2… | 0 |
+| `mask_file` | 直接指定 mask 文件名 | 文件名 或 null | null |
 | `output` | 输出格式 | both/full_ct/patch_96 | both |
-| `repeat` | 重复次数 | 1,2,3… | 1 |
+| `output_name` | 自定义输出文件名 | 字符串 或 null | null |
+| `repeat` | 重复次数（每次选不同mask） | 1,2,3… | 1 |
+| `eta` | DDIM随机性（仅noearly） | 0=确定性, 1=随机 | 0 |
 
 ## 依赖
 
