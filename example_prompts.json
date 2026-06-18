@@ -1,48 +1,54 @@
 {
   "_how_to_use": "复制为 prompts.json, 删掉不需要的任务, 运行: .\\run prompts.json",
-
   "_field_reference": {
-    "organ":         "liver | pancreas | kidney | colon | esophagus | uterus",
+    "organ": "liver | pancreas | kidney | colon | esophagus | uterus",
     "size_category": "tiny(≤5mm/T=4) | small(5-10mm/T=4) | medium(10-20mm/T=200) | large(>20mm/T=200)。注意: 现在真的按物理尺寸筛选mask, 找不到自动降级",
-    "phase":         "null=按论文自动(tiny/small→early, medium/large→noearly) | 也可手动指定 early/noearly",
-    "host_ct":       "BDMAP_XXXXXXXX | null=随机CT+随机mask",
-    "mask_index":    "指定第N个mask | 不设=随机",
-    "mask_file":     "直接指定mask文件名(最高优先级) | null",
-    "output":        "both=full_ct+96³patch | full_ct | patch_96",
-    "output_name":   "自定义文件名 | null=自动命名",
-    "repeat":        "同任务重复几次(每次选不同mask)",
-    "eta":           "DDIM随机性: 0=确定性(论文默认) | 1=最大随机性。仅noearly(medium/large)生效, early总是随机的"
+    "phase": "null=按论文自动(tiny/small→early, medium/large→noearly) | 也可手动指定 early/noearly",
+    "host_ct": "BDMAP_XXXXXXXX | null=随机CT+随机mask",
+    "mask_index": "指定第N个mask | 不设=随机",
+    "mask_file": "直接指定mask文件名(最高优先级) | null",
+    "output": "both=full_ct+96³patch | full_ct | patch_96",
+    "output_name": "自定义文件名 | null=自动命名",
+    "repeat": "同任务重复几次(每次选不同mask)",
+    "eta": "DDIM随机性: 0=确定性(论文默认) | 1=最大随机性。仅noearly(medium/large)生效, early总是随机的",
+    "radius_mm": "expected tumor radius mm (metadata only)",
+    "position": "expected position [0,1]^3 (metadata, mask has actual coords)",
+    "hu_stats": "expected HU [mu,sigma] (metadata, CT auto-extracts)"
   },
-
   "tasks": [
     {
-      "_what":  "肝脏大肿瘤×2 — noearly(T=200) + eta=1随机, 每次不同mask不同纹理",
+      "_what": "liver large x2 - shows radius_mm/position optional fields",
       "organ": "liver",
       "size_category": "large",
       "repeat": 2,
-      "eta": 1
+      "eta": 1,
+      "radius_mm": 25.0,
+      "position": [
+        0.5,
+        0.5,
+        0.6
+      ]
     },
     {
-      "_what":  "胰腺小肿瘤×2 — early(T=4)确定性, 自动降级到small(胰腺无large)",
+      "_what": "胰腺小肿瘤×2 — early(T=4)确定性, 自动降级到small(胰腺无large)",
       "organ": "pancreas",
       "size_category": "large",
       "repeat": 2,
       "eta": 0
     },
     {
-      "_what":  "食管微小肿瘤 — tiny(T=4), zero-shot, 指定mask文件",
+      "_what": "食管微小肿瘤 — tiny(T=4), zero-shot, 指定mask文件",
       "organ": "esophagus",
       "size_category": "tiny",
       "mask_file": "esophagus_tumor_t00__BDMAP_00000012.nii.gz"
     },
     {
-      "_what":  "结肠大肿瘤 — 自有权重(colon_early.pt), 对比度最高",
+      "_what": "结肠大肿瘤 — 自有权重(colon_early.pt), 对比度最高",
       "organ": "colon",
       "size_category": "large",
       "eta": 1
     }
   ],
-
   "global": {
     "device": "cpu"
   }

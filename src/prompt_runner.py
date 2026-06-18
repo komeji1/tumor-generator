@@ -178,6 +178,7 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
     oshort = ORGAN_SHORT[organ]
     organ_type = ORGAN_TYPE_MAP[organ]
     size_cat = task.get("size_category", "small")
+    radius_mm = task.get("radius_mm", None)
     phase = task.get("phase") or SIZE_CATEGORIES.get(size_cat, {}).get("phase", "early")
 
     # 如果此器官没有 noearly 权重，强制降级为 early
@@ -218,8 +219,11 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
 
     try:
         eta = task.get("eta", 0.0)
+        # Optional metadata (docs only; mask+CT already encode these implicitly)
+        meta_info = {k: task[k] for k in ("radius_mm", "position", "hu_stats") if k in task}
         fc, fm, aff, meta = embed_tumor_full_ct(
             ct_path, og_path, mask_path, organ_type, device, phase, output_fmt, eta=eta)
+        meta["user_spec"] = meta_info
 
         base = os.path.basename(mask_path).replace(".nii.gz", "")
         base = re.sub(r'_t(\d)', r'_s\1', base)  # _t00→_s00, won't corrupt "tumor"
