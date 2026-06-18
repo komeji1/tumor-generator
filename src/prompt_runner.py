@@ -61,8 +61,9 @@ OUTPUT_FORMATS = ["full_ct", "patch_96", "both"]
 # ═══════════════════════════════════════════════════════════════
 
 def resolve_mask(organ: str, bdmap_id: str = None, size_category: str = None,
-                 mask_index: int = 0, mask_file: str = None) -> str:
-    """根据条件解析/选择肿瘤 mask 文件路径。size_category 过滤只选对应尺寸的 mask。"""
+                 mask_index: int = 0, mask_file: str = None,
+                 radius_mm: float = None, position: list = None) -> str:
+    """根据条件解析/选择肿瘤 mask 文件路径。"""
     mask_dir = os.path.join(MASK_DIR, ORGAN_TYPE_MAP[organ])
 
     if mask_file:
@@ -76,19 +77,48 @@ def resolve_mask(organ: str, bdmap_id: str = None, size_category: str = None,
         raise FileNotFoundError(f"No masks found in {mask_dir}")
     candidates = all_masks
 
-    # 按 size_category 过滤 — 找不到则自动降级
+    # Load size index (shared for size/radius/position filters)
+    index_file = os.path.join(MASK_DIR, "mask_size_index.json")
+    org_key = ORGAN_TYPE_MAP[organ]
+    idx_data = None
+    if os.path.exists(index_file):
+        try:
+            idx_data = json.load(open(index_file, "r", encoding="utf-8")).get(org_key, {})
+        except Exception:
+            pass
+
+    # Filter by radius_mm (±25% tolerance, overrides size_category if both specified)
+    if radius_mm is not None and idx_data:
+        lo, hi = radius_mm * 0.75, radius_mm * 1.25
+        sized = [m for m in candidates if any(
+            lo <= info.get("radius_mm", 0) <= hi
+            for name, info in idx_data.items() if m.endswith(name))]
+        if sized:
+            candidates = sized
+            if size_category:
+                print(f"  radius_mm={radius_mm}mm → filtered to {len(candidates)} masks within [{lo:.1f}, {hi:.1f}]mm")
+        else:
+            print(f"  WARNING: no masks within ±25% of radius_mm={radius_mm}mm, using all {size_category or ''} masks")
+
+    # Filter by position (L2 distance in normalized [0,1]³, pick closest 20%)
+    if position is not None and len(position) == 3 and idx_data:
+        scored = []
+        for m in candidates:
+            for name, info in idx_data.items():
+                if m.endswith(name) and "center" in info:
+                    d = sum((a - b) ** 2 for a, b in zip(info["center"], position)) ** 0.5
+                    scored.append((d, m))
+                    break
+        if scored:
+            scored.sort(key=lambda x: x[0])
+            keep = max(3, len(scored) // 5)  # top 20% or at least 3
+            candidates = [m for _, m in scored[:keep]]
+            print(f"  position={position} → filtered to closest {len(candidates)} masks (dist={scored[0][0]:.3f})")
+
+    # Filter by size_category — with auto-downgrade
     if size_category and size_category in SIZE_CATEGORIES:
         keys = list(SIZE_CATEGORIES.keys())
         cat_idx = keys.index(size_category)
-        index_file = os.path.join(MASK_DIR, "mask_size_index.json")
-        org_key = ORGAN_TYPE_MAP[organ]
-        idx_data = None
-        if os.path.exists(index_file):
-            try:
-                idx_data = json.load(open(index_file, "r", encoding="utf-8"))
-            except Exception:
-                pass
-        # Try requested size, then downgrade
         for attempt in range(cat_idx + 1):
             cat = keys[cat_idx - attempt]
             max_vox = SIZE_CATEGORIES[cat]["max_vox"]
@@ -97,8 +127,7 @@ def resolve_mask(organ: str, bdmap_id: str = None, size_category: str = None,
             if idx_data:
                 sized = [m for m in candidates if any(
                     min_vox < info.get("voxels", 0) <= max_vox
-                    for name, info in idx_data.get(org_key, {}).items()
-                    if m.endswith(name))]
+                    for name, info in idx_data.items() if m.endswith(name))]
             else:
                 for m in candidates:
                     try:
@@ -195,12 +224,16 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
     # 1. 解析 mask (host_ct=null 时随机 mask_index)
     mask_idx = task.get("mask_index", 0)
     if bdmap_id is None and "mask_index" not in task:
-        mask_idx = random.randint(0, 99)  # random, not always largest
+        mask_idx = random.randint(0, 99)
+    radius_mm = task.get("radius_mm", None)
+    position = task.get("position", None)
     mask_path = resolve_mask(
         organ, bdmap_id=bdmap_id,
         size_category=size_cat,
         mask_index=mask_idx,
         mask_file=task.get("mask_file"),
+        radius_mm=radius_mm,
+        position=position,
     )
 
     # 2. 解析 CT + 器官 mask
@@ -259,6 +292,13 @@ def run_one_task(task: dict, device: str = "cpu") -> dict:
             "tumor_hu_std": round(float(t_hu.std()), 1),
             "weight_used": ORGAN_WEIGHT[organ][0 if phase == "early" else 1],
         })
+        # hu_stats check: warn if generated tumor HU deviates from user expectation
+        hu_stats = task.get("hu_stats", None)
+        if hu_stats and len(hu_stats) == 2 and len(t_hu) > 0:
+            exp_mu, exp_sigma = hu_stats
+            gen_mu = float(t_hu.mean())
+            if abs(gen_mu - exp_mu) > 2 * exp_sigma:
+                print(f"  HU WARNING: generated={gen_mu:.0f}HU, expected {exp_mu:.0f}±{2*exp_sigma:.0f}HU (|diff|={abs(gen_mu-exp_mu):.0f}HU > 2σ)")
         what = output_fmt.replace("_", "-")
         print(f"  OK  {organ}/{size_cat}  vox={n_vox:,}  HU={t_hu.mean():.0f}  "
               f"time={dt:.0f}s  → {what}")

@@ -11,9 +11,9 @@
     "output_name": "自定义文件名 | null=自动命名",
     "repeat": "同任务重复几次(每次选不同mask)",
     "eta": "DDIM随机性: 0=确定性(论文默认) | 1=最大随机性。仅noearly(medium/large)生效, early总是随机的",
-    "radius_mm": "expected tumor radius mm (metadata only)",
-    "position": "expected position [0,1]^3 (metadata, mask has actual coords)",
-    "hu_stats": "expected HU [mu,sigma] (metadata, CT auto-extracts)"
+    "radius_mm": "精确半径mm, ±25%筛选mask | null",
+    "position": "目标位置[0,1]^3, 选最近的20%mask | null",
+    "hu_stats": "期望HU[mu,sigma], 生成后>2sigma告警 | null"
   },
   "tasks": [
     {

@@ -74,7 +74,7 @@ SIZE_THRESHOLDS = {"tiny": 524, "small": 4189, "medium": 33510, "large": 999999}
 
 
 def _write_size_index():
-    """Scan Mask output dir and write mask_size_index.json for fast size filtering."""
+    """Scan Mask output dir and write mask_size_index.json with voxels, size_category, center, radius_mm."""
     import glob as _glob
     index = {}
     mask_root = os.path.join(MASK_PROJECT_DIR, "output", "real_ct")
@@ -87,13 +87,25 @@ def _write_size_index():
             if "_mask" in mf:
                 continue
             try:
-                n = int((nib.load(mf).get_fdata() > 0).sum())
-                # Classify size
+                data = nib.load(mf).get_fdata() > 0
+                n = int(data.sum())
+                # Size category
                 cat = "tiny"
                 for name in ["small", "medium", "large"]:
                     if n > SIZE_THRESHOLDS[name]:
                         cat = name
-                index[organ_dir][os.path.basename(mf)] = {"voxels": n, "size_category": cat}
+                # Equivalent radius from volume (V = 4/3*pi*r^3 → r = (3V/4pi)^(1/3))
+                radius = (3 * n / (4 * np.pi)) ** (1 / 3.0)
+                # Center of mass (voxel coords → normalized [0,1]³)
+                idx = np.argwhere(data)
+                center_vox = idx.mean(axis=0)
+                center_norm = (center_vox / np.array(data.shape)).tolist()
+                index[organ_dir][os.path.basename(mf)] = {
+                    "voxels": n,
+                    "size_category": cat,
+                    "radius_mm": round(float(radius), 1),
+                    "center": [round(float(c), 4) for c in center_norm],
+                }
             except Exception:
                 pass
     json.dump(index, open(SIZE_INDEX_FILE, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
