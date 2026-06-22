@@ -1,245 +1,340 @@
-# NV-Generate-CTMR
+# NV-Generate-CTMR（肿瘤生成器）
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![许可证](https://img.shields.io/badge/许可证-Apache%202.0-blue.svg)](LICENSE)
 [![HuggingFace CT](https://img.shields.io/badge/HuggingFace-NV--Generate--CT-yellow.svg)](https://huggingface.co/nvidia/NV-Generate-CT)
-[![HuggingFace MR](https://img.shields.io/badge/HuggingFace-NV--Generate--MR-yellow.svg)](https://huggingface.co/nvidia/NV-Generate-MR)
-[![HuggingFace MR-Brain](https://img.shields.io/badge/HuggingFace-NV--Generate--MR--Brain-yellow.svg)](https://huggingface.co/nvidia/NV-Generate-MR-Brain)
 [![arXiv MAISI-v1](https://img.shields.io/badge/arXiv-2409.11169-red.svg)](https://arxiv.org/abs/2409.11169)
 [![arXiv MAISI-v2](https://img.shields.io/badge/arXiv-2508.05772-red.svg)](https://arxiv.org/abs/2508.05772)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 
-3D Latent Diffusion Models (LDM) for generating large CT and MRI images with corresponding segmentation masks. Supports variable volume size and voxel spacing with precise control of organ/tumor size.
-
-Please cite all the following papers if you are using code or model from this repo.
-
-- [MAISI-v1 Paper (WACV 2025)](https://arxiv.org/pdf/2409.11169)
-- [MAISI-v2 Paper (AAAI 2026)](https://arxiv.org/pdf/2508.05772)
+基于 **MAISI（Medical AI for Synthetic Imaging）** 框架的三维潜扩散模型（LDM），用于生成高分辨率合成 CT 图像及配对的 132 类分割掩码。支持可变体积尺寸与体素间距，并可精确控制器官/肿瘤的大小。
 
 | | | |
 |:---:|:---:|:---:|
-|![MR-Brain example](assets/combined_grid.gif)| ![MR example](assets/MR_example.png) | ![Generated CT and segmentation](assets/typical-generated-ct-image-corresponding-segmentation-condition.gif) |
-|*Generated MR Brain with `rflow-mr-brain`*| *Generated MR T2w prostate and T1w brain image with  with `rflow-mr`* | *Generated CT image/mask pair with  with `rflow-ct`* |
+|![生成的CT与分割](assets/typical-generated-ct-image-corresponding-segmentation-condition.gif)| ![MR示例](assets/MR_example.png) | ![MR脑部示例](assets/combined_grid.gif) |
+|*使用 `rflow-ct` 生成的 CT 图像/掩码配对*| *使用 `rflow-mr` 生成的 MR 图像* | *使用 `rflow-mr-brain` 生成的 MR 脑部图像* |
 
-## Overview
+---
 
-NV-Generate-CTMR generates high-resolution synthetic 3D medical volumes using latent diffusion models built on the MAISI (Medical AI for Synthetic Imaging) framework. It produces CT images with paired segmentation masks and MRI volumes across multiple contrasts — enabling synthetic training data generation, data augmentation for rare pathologies, and privacy-preserving data sharing.
+## 项目简介
 
-Key capabilities:
+NV-Generate-CTMR 利用基于 MAISI 框架的潜扩散模型生成高分辨率合成三维医学影像。它能产出 CT 图像及配对的 132 类分割掩码，也支持多种对比度的 MRI 体积生成——可用于合成训练数据、稀有病理的数据增强以及隐私保护的数据共享。
 
-- **CT generation** with paired 132-class segmentation masks, supporting volumes up to 512x512x768 voxels with controllable organ and tumor size
-- **MRI generation** across T1, T2, FLAIR, and additional contrasts for brain, abdomen, breast, and prostate anatomy
-- **Brain MRI synthesis** with cross-sequence ControlNet for generating matched multi-contrast brain volumes (T1w, T2w, FLAIR, SWI)
-- **Variable resolution** with configurable volume size and voxel spacing for each generation
+核心能力：
 
-**[Live Demo](https://build.nvidia.com/nvidia/maisi)** (no GPU required)
+- **CT 生成**：配对 132 类分割掩码，支持最大 512×512×768 体素的体积，可控制器官和肿瘤尺寸
+- **MRI 生成**：覆盖 T1、T2、FLAIR 等多种对比度，支持脑部、腹部、乳腺、前列腺等解剖区域
+- **脑部 MRI 合成**：跨序列 ControlNet，生成配对的多对比度脑部体积（T1w、T2w、FLAIR、SWI）
+- **可变分辨率**：每次生成均可配置体积尺寸和体素间距
 
-## News
+---
 
-- **🎆 March 2026 🎇** — Released NV-Generate-MR-Brain v0 models `rflow-mr-brain` for fast high-resolution 3D MR brain image generation, which covers both whole brain and skull-stripped brain generation for T1w, T2w, FLAIR, SWI images. The training data of this version v0 is [MR-RATE](https://huggingface.co/datasets/Forithmus/MR-RATE).
-- **[October 2025]** — Released rectified flow models `rflow-mr` for fast high-resolution 3D MR image generation. Upgraded previous MAISI
-repo to this NV-Generate-CTMR repo.
-- **[March 2025]** — Released rectified flow models `rflow-ct` for **fast** high-resolution 3D CT image generation and paired CT
-image/mask synthesis. `rflow-ct` is **33x faster** than `ddpm-ct` and generates better quality images for the head region and small
-output volumes.
-- **[August 2024]** — Initial release `ddpm-ct` supporting 3D latent diffusion (DDPM) for CT image generation and paired CT image/mask
-synthesis.
+## 生成原理详解
 
-## Table of Contents
+MAISI 采用**两阶段级联扩散模型管线**：先生成解剖结构掩码，再由掩码条件生成 CT 图像。核心思想是 **"结构先行，纹理后填"**。
 
-- [Overview](#overview)
-- [News](#news)
-- [1. Model Variants](#1-model-variants)
-- [2. Quick Start](#2-quick-start-requires-at-least-a-16g-gpu)
-  - [2.1 Installation](#21-installation)
-  - [2.2 MR Brain Image Generation](#22-mr-brain-image-generation)
-  - [2.3 CT Paired Image/Mask Generation](#23-ct-paired-imagemask-generation)
-  - [2.4 CT Image Generation](#24-ct-image-generation)
-  - [2.5 MR Image Generation](#25-mr-image-generation)
-  - [2.6 CT Image Generation from Your Own Mask](#26-ct-image-generation-from-your-own-mask)
-  - [2.7 Example Application: MR-to-CT Image Synthesis](#27-example-application-adapting-nv-generate-ctmr-for-mr-to-ct-image-synthesis)
-- [3. Documentation: details of data preparation, training, and inference tutorials](#3-documentation-details-of-data-preparation-training-and-inference-tutorials)
-- [4. Performance: accuracy, speed, and GPU memory usage](#4-performance-accuracy-speed-and-gpu-memory-usage)
-- [5. License](#5-license)
-- [6. Citation](#6-citation)
-- [7. Resources](#7-resources)
-- [8. Acknowledgements](#8-acknowledgements)
+### 第一阶段：掩码生成（结构蓝图）
 
-## 1. Model Variants
+这一阶段决定每个体素属于什么解剖结构——即生成一个 132 类的三维分割掩码。
 
-This repository provides **four model variants** for medical image generation: `rflow-mr-brain`, `rflow-mr`, `rflow-ct`, and `ddpm-ct`.
+**获取掩码有两条路径：**
+
+#### 路径 A：从数据库查找现成掩码
+
+当 `controllable_anatomy_size` 为空时，从预存的约 4000 个真实标注掩码数据库中查找最匹配的掩码，并进行弹性变形增强。
+
+#### 路径 B：用 Mask DDPM 重新生成合成掩码
+
+当指定了器官/肿瘤尺寸（如 `controllable_anatomy_size=[("liver", 0.5)]`）时，使用 Mask Diffusion Model 从纯随机噪声生成合成掩码：
+
+```
+anatomy_size（10维向量）→ Mask DDPM 去噪 → mask latent → Mask AE 解码 → 132 类掩码
+```
+
+- **`anatomy_size`** 是一个 10 维向量，控制 5 个器官 + 5 种肿瘤的相对尺寸
+  - 器官：胆囊、肝脏、胃、胰腺、结肠
+  - 肿瘤：肺肿瘤、胰腺肿瘤、肝肿瘤、结肠癌、骨病变
+  - 值范围 `[0, 1.0]`，`-1` 表示不控制
+
+### 第二阶段：由掩码生成 CT 图像（纹理填充）
+
+根据掩码的解剖结构，填充真实的 CT 纹理（HU 值）：
+
+```
+132类掩码 → binarize_labels（转为8通道二进制）→ ControlNet 条件信号
+                                                        │
+纯噪声 latent → Image Diffusion UNet ←── ControlNet 注入 ←── spacing/modality/region
+                      │
+               去噪循环（30步 RFlow / 1000步 DDPM）
+                      │
+               干净 latent → Image AE 解码 → CT 图像（HU值）
+                      │
+               crop_img_body_mask → 背景设为 -1000 HU
+```
+
+关键步骤：
+
+1. **`binarize_labels`**：将 1 通道的 132 类整数掩码转为 8 通道二进制 tensor（每个 voxel 的 label 值做 8-bit 二进制展开），作为 ControlNet 的条件输入
+2. **ControlNet 注入**：每个去噪时间步，ControlNet 处理掩码条件，输出残差信号注入 Diffusion UNet 各层
+3. **Diffusion UNet 去噪**：RFlow 版 30 步，DDPM 版 1000 步
+4. **Image AE 解码**：潜变量 → CT 图像，HU 范围映射为 [-1000, 1000]
+5. **背景清理**：掩码外的 voxel 强制设为 -1000 HU（空气的 CT 值）
+
+### 掩码的作用总结
+
+| 作用 | 说明 |
+|------|------|
+| 空间结构定义 | 告诉模型器官的位置、大小、形状 |
+| ControlNet 条件信号 | 通过二进制化转为 8 通道，引导对应区域生成正确纹理 |
+| 器官尺寸控制 | `anatomy_size` 向量控制各器官/肿瘤的相对大小 |
+| 身体区域约束 | 从掩码推导 `top/bottom_region_index`，约束解剖范围 |
+| 背景清理 | 将掩码外的 voxel 设为 -1000 HU |
+| 质量检查 | 各器官区域的 CT median HU 值与真实统计对比 |
+
+### 数据流全景
+
+```
+用户输入：
+  body_region=["chest","abdomen"]  anatomy_list=["liver","spleen"]
+  controllable_anatomy_size=[("liver", 0.5)]
+  spacing=[1.5, 1.5, 2.0]  output_size=[256,256,512]  modality=1 (CT)
+         │
+         ▼
+┌─────────────────────────────────┐
+│  第一阶段：掩码生成              │
+│  anatomy_size → Mask DDPM →    │
+│  Mask AE → 132 类三维掩码       │
+│  （256³, 1.5mm 间距）           │
+└─────────────────────────────────┘
+         │
+         │  重采样至目标尺寸/间距
+         │  binarize_labels → 8通道条件
+         │  推导 top/bottom_region_index
+         ▼
+┌─────────────────────────────────┐
+│  第二阶段：图像生成              │
+│  噪声 → ControlNet+DM 30步    │
+│  去噪 → 干净 latent → Image   │
+│  AE 解码 → CT 体积（HU）       │
+│  背景 → -1000 HU               │
+└─────────────────────────────────┘
+         │
+         ▼
+  输出：sample_xxx_image.nii.gz + sample_xxx_label.nii.gz
+```
+
+---
+
+## 模型变体
+
+本仓库提供四个模型变体：
 
 | | `rflow-mr-brain` | `rflow-mr` | `rflow-ct` | `ddpm-ct` |
 |---|---|---|---|---|
-| **Modality** | MRI (Brain) | MRI | CT | CT |
-| **Model Weights** | [NV-Generate-MR-Brain](https://huggingface.co/nvidia/NV-Generate-MR-Brain) | [NV-Generate-MR](https://huggingface.co/nvidia/NV-Generate-MR) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) |
-| **Architecture** | MAISI-v2 (Rectified Flow) | MAISI-v2 (Rectified Flow) | MAISI-v2 (Rectified Flow) | MAISI-v1 (DDPM) |
-| **Paper** | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v1](https://arxiv.org/abs/2409.11169) |
-| **Inference Steps** | 30 | 30 | 30 | 1000 |
-| **Max Volume** | 512x512x256 | 512x512x128 | 512x512x768 | 512x512x768 |
-| **Use Case** | MR Brain multi-contrast synthesis | MR image-only generation | CT image/mask pair generation | CT image/mask pair generation |
-| **License** | [NVIDIA Open Model](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) | [NVIDIA Non-Commercial](https://developer.download.nvidia.com/licenses/NVIDIA-OneWay-Noncommercial-License-22Mar2022.pdf) | [NVIDIA Open Model](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) | [NVIDIA Open Model](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
+| **模态** | MRI（脑部） | MRI | CT | CT |
+| **模型权重** | [NV-Generate-MR-Brain](https://huggingface.co/nvidia/NV-Generate-MR-Brain) | [NV-Generate-MR](https://huggingface.co/nvidia/NV-Generate-MR) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) |
+| **架构** | MAISI-v2（Rectified Flow） | MAISI-v2（Rectified Flow） | MAISI-v2（Rectified Flow） | MAISI-v1（DDPM） |
+| **推理步数** | 30 | 30 | 30 | 1000 |
+| **最大体积** | 512×512×256 | 512×512×128 | 512×512×768 | 512×512×768 |
+| **用途** | MR 脑部多对比度合成 | MR 图像生成 | CT 图像/掩码配对生成 | CT 图像/掩码配对生成 |
+| **许可证** | [NVIDIA 开源模型](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) | [NVIDIA 非商用](https://developer.download.nvidia.com/licenses/NVIDIA-OneWay-Noncommercial-License-22Mar2022.pdf) | [NVIDIA 开源模型](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) | [NVIDIA 开源模型](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
 
-**Summary**: Use `rflow-ct` for CT (whole-body inference). Use `rflow-mr-brain` for brain MRI (multi-contrast). Use `rflow-mr` for other MRI anatomies (fine-tune on your own data).
+**简要推荐**：CT 用 `rflow-ct`，脑部 MRI 用 `rflow-mr-brain`，其他 MRI 用 `rflow-mr`（需在自己的数据上微调）。
 
-### Detailed comparison
+---
 
-|                    | `rflow-mr-brain`     | `rflow-mr`                          | `rflow-ct`                        | `ddpm-ct`             |
-|--------------------|---------------------|--------------------------------------|-----------------------------------|----------------------|
-| **Modality**       | MRI (brain)         | MRI                                  | CT                                | CT                   |
-| **Release Date**   | **March 2026**       | October 2025                           |  March 2025                     |    August 2024        |
-| **Model Weights**  | [NV-Generate-MR-Brain](https://huggingface.co/nvidia/NV-Generate-MR-Brain) | [NV-Generate-MR](https://huggingface.co/nvidia/NV-Generate-MR) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) | [NV-Generate-CT](https://huggingface.co/nvidia/NV-Generate-CT) |
-| **Quick Start**    | [2.2 MR Brain Image Generation](#22-mr-brain-image-generation) | [2.5 MR Image Generation](#25-mr-image-generation) | [2.3 CT Paired Image/Mask](#23-ct-paired-imagemask-generation), [2.4 CT Image](#24-ct-image-generation) | [2.3 CT Paired Image/Mask](#23-ct-paired-imagemask-generation) |
-| **Architecture**   | MAISI-v2 (Rectified Flow) | MAISI-v2 (Rectified Flow)            | MAISI-v2 (Rectified Flow)         | MAISI-v1 (DDPM)      |
-| **Paper**          | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v2](https://arxiv.org/abs/2508.05772) | [MAISI-v1](https://arxiv.org/abs/2409.11169) |
-| **Network Detail** | [config_network_rflow.json](./configs/config_network_rflow.json) | [config_network_rflow.json](./configs/config_network_rflow.json) | [config_network_rflow.json](./configs/config_network_rflow.json) | [config_network_ddpm.json](./configs/config_network_ddpm.json) |
-| **Inference Steps**| 30                  | 30                                    | 30 (**33× faster than `ddpm-ct`**)               | 1000                 |
-| **Max Volume**     | 512×512×256         | 512×512×128                           | 512×512×768                       | 512×512×768          |
-| **Use Case**       | MR image-only generation for brain (T1w, T2w, FLAIR, SWI; whole brain and skull-stripped) | MR image-only generation with user specified contrast | CT image-only generation; CT image/mask pair generation | CT image-only generation; CT image/mask pair generation |
-| **Model: Foundation VAE**     | same VAE with `ddpm-ct` | trained on CT and MR (with additional abdomen MRI) | same VAE with `ddpm-ct` | trained on CT and MR |
-| **Model: Foundation Diffusion Model**     | does not take body region as input, takes [modality](configs/modality_mapping.json) as input (brain-focused) | does not take body region as input, takes [modality](configs/modality_mapping.json) as input. We recommend finetuning with users' own MRI data. | does not take body region as input, has API for modality input (always set as 'ct' but expandable) | takes body region as input, no API for modality input  |
-| **Model: ControlNet**     | Coming soon | N/A | generate image/mask pairs, with contrastive loss | generate image/mask pairs, no contrastive loss |
+## 快速开始（需要至少 16G GPU）
 
-## 2. Quick Start (requires at least a 16G GPU)
+> ⚠️ **选择合适的 `dim` 和 `spacing` 是影响输出质量的最重要因素。** `dim × spacing` 定义了视野（FOV）。每个模型变体只见过其目标解剖的训练数据分布范围内的 FOV——超出分布的 FOV（例如 128mm 立方的全身 CT）会产生不可用的输出。请参考：
+> - **CT**：[docs/inference.md](docs/inference.md)
+> - **MR**：[docs/inference.md](docs/inference.md)
 
-> ⚠️ **Picking the right `dim` and `spacing` is the single biggest factor in output quality.** The product `dim × spacing` defines the field of view (FOV). Each model variant has only ever seen FOVs in the **training-data distribution** for its target anatomy — asking it to synthesize at a numerically-valid but out-of-distribution FOV (e.g. a 128 mm-cube whole-body CT) produces unusable output. Start from the recommended `(dim, spacing)` per anatomy:
->
-> - **CT** (`rflow-ct`, `ddpm-ct`): [docs/inference.md#recommended-spacing-for-ct](docs/inference.md#recommended-spacing-for-ct)
-> - **MR** (`rflow-mr`): [docs/inference.md#recommended-fov-for-mr-rflow-mr-model](docs/inference.md#recommended-fov-for-mr-rflow-mr-model)
->
-> See also the `infer_image-only` / `infer_mask-image-paired` skills under [skills/](skills/) for end-to-end workflow guidance.
-
-### 2.1 Installation
+### 安装
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2.2 MR Brain Image Generation
-
-Please refer to [inference_diff_unet_tutorial.ipynb](inference_diff_unet_tutorial.ipynb) for the inference tutorial that generates CT or MR image without mask.
-
-You can also run it in command line to generate MR image without mask. Please change "modality" in [configs/config_maisi_diff_model_rflow-mr-brain.json](configs/config_maisi_diff_model_rflow-mr-brain.json) according to [configs/modality_mapping.json](configs/modality_mapping.json) to control the output MR contrast. Currently we support both whole brain and skull-stripped brain generation for T1w, T2w, FLAIR, SWI images.
-
-```json
-"mri":8, # MRI without specifying contrast or skull condition, can be any of them
-"mri_t1":9, # T1w whole-brain MRI
-"mri_t2":10, # T2w whole-brain MRI
-"mri_flair":11, # FLAIR whole-brain MRI
-"mri_swi":20, # SWI whole-brain MRI
-"mri_t1_skull_stripped":29, # T1w skull-stripped brain MRI
-"mri_t2_skull_stripped":30, # T2w skull-stripped brain MRI
-"mri_flair_skull_stripped":31, # FLAIR skull-stripped brain MRI
-"mri_swi_skull_stripped":32, # SWI skull-stripped brain MRI
-```
-
-```bash
-network="rflow"
-generate_version="rflow-mr-brain"
-python -m scripts.download_model_data --version ${generate_version} --root_dir "./" --model_only
-python -m scripts.diff_model_infer -t ./configs/config_network_${network}.json -e ./configs/environment_maisi_diff_model_${generate_version}.json -c ./configs/config_maisi_diff_model_${generate_version}.json
-```
-
-### 2.3 CT Paired Image/Mask Generation
+### CT 图像/掩码配对生成
 
 ```bash
 export MONAI_DATA_DIRECTORY="./temp_work_dir"
 network="rflow"
-generate_version="rflow-ct" # can change to "ddpm-ct"
-python -m scripts.inference -t ./configs/config_network_${network}.json -i ./configs/config_infer.json -e ./configs/environment_${generate_version}.json --random-seed 0 --version ${generate_version}
+generate_version="rflow-ct"  # 可改为 "ddpm-ct"
+python -m scripts.inference \
+  -t ./configs/config_network_${network}.json \
+  -i ./configs/config_infer.json \
+  -e ./configs/environment_${generate_version}.json \
+  --random-seed 0 --version ${generate_version}
 ```
 
-See also: [inference_tutorial.ipynb](inference_tutorial.ipynb)
+推理配置文件 [`configs/config_infer.json`](configs/config_infer.json) 中的关键参数：
 
-### 2.4 CT Image Generation
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `body_region` | 身体区域列表 | `["chest", "abdomen", "pelvis"]` |
+| `anatomy_list` | 要生成的器官列表 | `["liver", "spleen", "heart"]` |
+| `controllable_anatomy_size` | 器官/肿瘤尺寸控制（空=用现成掩码） | `[]` |
+| `output_size` | 输出体积尺寸 | `[256, 256, 512]` |
+| `spacing` | 体素间距（mm） | `[1.5, 1.5, 2.0]` |
+| `modality` | 模态（CT=1） | `1` |
+| `num_inference_steps` | 推理步数 | `30`（RFlow） |
+| `cfg_guidance_scale` | CFG 引导强度（0=关闭） | `0.0` |
+
+### CT 图像生成（无掩码）
 
 ```bash
 network="rflow"
-generate_version="rflow-ct" # can change to "ddpm-ct"
+generate_version="rflow-ct"
 python -m scripts.download_model_data --version ${generate_version} --root_dir "./" --model_only
-python -m scripts.diff_model_infer -t ./configs/config_network_${network}.json -e ./configs/environment_maisi_diff_model_${generate_version}.json -c ./configs/config_maisi_diff_model_${generate_version}.json
+python -m scripts.diff_model_infer \
+  -t ./configs/config_network_${network}.json \
+  -e ./configs/environment_maisi_diff_model_${generate_version}.json \
+  -c ./configs/config_maisi_diff_model_${generate_version}.json
 ```
 
-### 2.5 MR Image Generation
+### 使用自定义掩码生成 CT 图像
 
-Change `"modality"` in [configs/config_maisi_diff_model_rflow-mr.json](configs/config_maisi_diff_model_rflow-mr.json) according to [configs/modality_mapping.json](configs/modality_mapping.json) to control the output MR contrast. Supported contrasts: T1/T2 brain, FLAIR skull-stripped brain, T2 prostate, T1 breast, T1/T2 abdomen. But if you are going to synthesize brain images, we recommend using `rflow-mr-brain` model instead. Please see [2.2 MR Brain Image Generation](#22-mr-brain-image-generation). Different body region has different recommended FOV, please see [detailed inference guide](./docs/inference.md#recommended-fov-for-mr-rflow-mr-model).
+如果你已有 MAISI 132 类词汇表的三维分割掩码（含体包络 label `200`），可以直接用它生成配对 CT：
 
 ```bash
 network="rflow"
-generate_version="rflow-mr"
-python -m scripts.download_model_data --version ${generate_version} --root_dir "./" --model_only
-python -m scripts.diff_model_infer -t ./configs/config_network_${network}.json -e ./configs/environment_maisi_diff_model_${generate_version}.json -c ./configs/config_maisi_diff_model_${generate_version}.json
-```
-
-### 2.6 CT Image Generation from Your Own Mask
-
-If you already have a 3D label mask in the **MAISI 132-class vocabulary** with the body envelope (label `200`) added, you can feed it directly to the CT ControlNet to synthesize a paired CT image — no mask diffusion step needed:
-
-```bash
-network="rflow"
-generate_version="rflow-ct" # can change to "ddpm-ct"
+generate_version="rflow-ct"
 python -m scripts.download_model_data --version ${generate_version} --root_dir "./"
 python -m scripts.infer_image_from_mask \
   -t ./configs/config_network_${network}.json \
   -i ./configs/config_infer.json \
   -e ./configs/environment_${generate_version}.json \
-  --mask /path/to/your_mask.nii.gz
+  --mask /你的掩码路径.nii.gz
 ```
 
-> ⚠️ **The mask must be in the MAISI 132-class label vocabulary AND include the body envelope (label 200).** In concrete terms, the MAISI 132-class vocabulary is the same as the `nv-segment-ct` output label definition **plus the body envelope (label 200)**. The authoritative reference is [`configs/label_dict.json`](configs/label_dict.json). Two practical ways to produce a valid mask:
->
-> - **From `nv-segment-ct`** (recommended — already in MAISI vocabulary): run `nv-segment-ct` on the CT, then add the body envelope via `scripts.utils.add_body_envelope` (label 200 is never emitted by `nv-segment-ct`).
-> - **From another segmenter**: remap the output labels to the MAISI 132-class IDs in `configs/label_dict.json`, then add the body envelope.
->
-> See the [`infer_image-from-mask` skill](skills/infer_image-from-mask.md) for the full preprocessing chain and the complete spec of "valid mask format".
+> ⚠️ **掩码必须使用 MAISI 132 类标签词汇表，并包含体包络（label 200）。** 参见 [`configs/label_dict.json`](configs/label_dict.json)。
 
-For batch generation from many masks listed in a JSON, see [`scripts.infer_image_from_mask_batch`](scripts/infer_image_from_mask_batch.py).
+### MR 脑部图像生成
 
-### 2.7 Example Application: Adapting NV-Generate-CTMR for MR-to-CT Image Synthesis
+```bash
+network="rflow"
+generate_version="rflow-mr-brain"
+python -m scripts.download_model_data --version ${generate_version} --root_dir "./" --model_only
+python -m scripts.diff_model_infer \
+  -t ./configs/config_network_${network}.json \
+  -e ./configs/environment_maisi_diff_model_${generate_version}.json \
+  -c ./configs/config_maisi_diff_model_${generate_version}.json
+```
 
-A reference implementation for MR-to-CT synthesis based on NV-Generate-CTMR (rflow-ct) is available here: <https://github.com/brudfors/maisi-mr-to-ct>.
+在 [`configs/config_maisi_diff_model_rflow-mr-brain.json`](configs/config_maisi_diff_model_rflow-mr-brain.json) 中修改 `"modality"` 来控制 MR 对比度：
 
-If you've adapted NV-Generate-CTMR for other imaging tasks or applications and would like to share your work, please feel free to open an issue or contact the maintainers — we'd love to link to your repo.
+| 模态编号 | 说明 |
+|---------|------|
+| 8 | MRI（不指定对比度） |
+| 9 | T1w 全脑 |
+| 10 | T2w 全脑 |
+| 11 | FLAIR 全脑 |
+| 20 | SWI 全脑 |
+| 29 | T1w 剥颅脑 |
+| 30 | T2w 剥颅脑 |
+| 31 | FLAIR 剥颅脑 |
+| 32 | SWI 剥颅脑 |
 
-## 3. Documentation: details of data preparation, training, and inference tutorials
+---
 
-| Guide | Description |
-|-------|-------------|
-| [Setup](docs/setup.md) | Full installation guide, dependencies, model weight download |
-| [Inference](docs/inference.md) | Detailed inference parameters, spacing tables |
-| [Training](docs/training.md) | VAE, Diffusion Model, and ControlNet training guides |
-| [Data Preparation](docs/data.md) | Dataset formats and preparation steps |
-| [Evaluation](docs/evaluation.md) | FID evaluation tool and benchmark results |
-| [Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
-| [Applications](docs/applications.md) | Community adaptations (MR-to-CT synthesis) |
-| [Inference Tutorial](inference_tutorial.ipynb) | Quick start CT paired generation (notebook) |
-| [Diffusion Inference](inference_diff_unet_tutorial.ipynb) | CT/MR image-only generation (notebook) |
-| [Training Tutorials](train_vae_tutorial.ipynb) | VAE, diffusion, and ControlNet training |
+## MAISI 132 类标签词汇表
 
-Training, inference, data preparation, and evaluation details are covered in the guides linked above.
+掩码使用 132 类标签体系（参见 [`configs/label_dict.json`](configs/label_dict.json)），常用标签：
 
-## 4. Performance: accuracy, speed, and GPU memory usage
+| 标签值 | 器官/结构 |
+|-------|----------|
+| 0 | 背景 |
+| 1 | 肝脏 |
+| 3 | 脾脏 |
+| 4 | 胰腺 |
+| 5 | 右肾 |
+| 10 | 胆囊 |
+| 12 | 胃 |
+| 14 | 左肾 |
+| 22 | 脑 |
+| 23 | 肺肿瘤 |
+| 24 | 胰腺肿瘤 |
+| 26 | 肝肿瘤 |
+| 27 | 结肠癌原发灶 |
+| 28-32 | 肺叶 |
+| 33-57 | 脊椎 |
+| 128 | 骨病变 |
+| 132 | 气管 |
+| 200 | 体包络（特殊值，必须包含） |
 
-On the unseen [autoPET 2023](https://www.nature.com/articles/s41597-022-01718-3) benchmark:
+---
 
-| Model | FID Score | Inference Steps | Speed vs ddpm-ct |
-|-------|----------|-----------------|------------------|
-| `rflow-ct` | **5.124** | 30 | **33x faster** |
-| `ddpm-ct` | 6.083 | 1000 | baseline |
+## 项目结构
 
-For inference parameters, see [Documentation](#3-documentation-details-of-data-preparation-training-and-inference-tutorials). For GPU memory and timing, see [Performance](docs/performance.md).
+```
+NV-Generate-CTMR/
+├── configs/                    # 配置文件
+│   ├── config_infer.json       # 推理参数
+│   ├── config_network_rflow.json  # RFlow 网络定义
+│   ├── config_network_ddpm.json   # DDPM 网络定义
+│   ├── environment_rflow-ct.json  # RFlow-CT 环境路径
+│   ├── environment_ddpm-ct.json   # DDPM-CT 环境路径
+│   ├── label_dict.json         # 132 类标签词汇表
+│   └── modality_mapping.json   # 模态编号映射
+├── scripts/                    # 核心代码
+│   ├── inference.py            # 主推理入口
+│   ├── sample.py               # LDMSampler 编排器
+│   ├── sample_mask.py          # 掩码生成管线
+│   ├── infer_image_from_mask.py # 从掩码生成图像管线
+│   ├── utils_infer.py          # 推理核心（去噪循环 + AE 解码）
+│   ├── utils.py                # 工具函数（标签映射、二进制化等）
+│   ├── augmentation.py         # 掩码增强
+│   ├── quality_check.py        # 生成质量检查
+│   ├── find_masks.py           # 掩码数据库查找
+│   └── download_model_data.py  # 模型权重下载
+├── inference_tutorial.py       # 推理教程脚本
+├── inference_diff_unet_tutorial.py  # 图像生成教程脚本
+├── docs/                       # 文档
+├── skills/                     # 技能指南
+├── figures/                    # 示例图片
+└── requirements.txt            # 依赖列表
+```
 
-## 5. License
+---
 
-| Component | License |
-|-----------|---------|
-| Source code | [Apache 2.0](LICENSE) |
-| NV-Generate-CT weights | [NVIDIA Open Model](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
-| NV-Generate-MR weights | [NVIDIA Non-Commercial](https://developer.download.nvidia.com/licenses/NVIDIA-OneWay-Noncommercial-License-22Mar2022.pdf) |
-| NV-Generate-MR-Brain weights | [NVIDIA Open Model](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
+## 性能
 
-This project will download and install additional third-party open source software projects. Review the license terms of these open source projects before use.
+在未见过的 [autoPET 2023](https://www.nature.com/articles/s41597-022-01718-3) 基准上：
 
-## 6. Citation
+| 模型 | FID 分数 | 推理步数 | 相对速度 |
+|------|---------|---------|---------|
+| `rflow-ct` | **5.124** | 30 | **比 ddpm-ct 快 33 倍** |
+| `ddpm-ct` | 6.083 | 1000 | 基线 |
+
+---
+
+## 文档
+
+| 指南 | 说明 |
+|------|------|
+| [安装](docs/setup.md) | 完整安装指南、依赖、模型权重下载 |
+| [推理](docs/inference.md) | 推理参数详解、间距表 |
+| [训练](docs/training.md) | VAE、Diffusion Model、ControlNet 训练指南 |
+| [数据准备](docs/data.md) | 数据集格式与准备步骤 |
+| [评估](docs/evaluation.md) | FID 评估工具与基准结果 |
+| [故障排除](docs/troubleshooting.md) | 常见问题与解决方案 |
+
+---
+
+## 许可证
+
+| 组成 | 许可证 |
+|------|--------|
+| 源代码 | [Apache 2.0](LICENSE) |
+| NV-Generate-CT 权重 | [NVIDIA 开源模型](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
+| NV-Generate-MR 权重 | [NVIDIA 非商用](https://developer.download.nvidia.com/licenses/NVIDIA-OneWay-Noncommercial-License-22Mar2022.pdf) |
+| NV-Generate-MR-Brain 权重 | [NVIDIA 开源模型](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) |
+
+---
+
+## 引用
+
+如果你使用了本仓库的代码或模型，请引用以下论文：
 
 ```bibtex
 @article{zhao2026maisi,
@@ -261,21 +356,22 @@ This project will download and install additional third-party open source softwa
 }
 ```
 
-## 7. Resources
+---
 
-- [NV-Generate-CT on HuggingFace](https://huggingface.co/nvidia/NV-Generate-CT) -- CT model weights and model card
-- [NV-Generate-MR on HuggingFace](https://huggingface.co/nvidia/NV-Generate-MR) -- MR model weights and model card
-- [NV-Generate-MR-Brain on HuggingFace](https://huggingface.co/nvidia/NV-Generate-MR-Brain) -- Brain MRI model weights and model card
-- [MR-RATE on HuggingFace](https://huggingface.co/datasets/Forithmus/MR-RATE) -- Brain MRI model training data MR-RATE
-- [MAISI Live Demo](https://build.nvidia.com/nvidia/maisi) -- Try online without GPU
-- [MAISI-v1 Paper (WACV 2025)](https://arxiv.org/pdf/2409.11169)
-- [MAISI-v2 Paper (AAAI 2026)](https://arxiv.org/pdf/2508.05772)
-- Built with [MONAI](https://monai.io/) -- Medical Open Network for AI
+## 资源
 
-## 8. Acknowledgements
+- [NV-Generate-CT（HuggingFace）](https://huggingface.co/nvidia/NV-Generate-CT) — CT 模型权重
+- [NV-Generate-MR（HuggingFace）](https://huggingface.co/nvidia/NV-Generate-MR) — MR 模型权重
+- [NV-Generate-MR-Brain（HuggingFace）](https://huggingface.co/nvidia/NV-Generate-MR-Brain) — 脑部 MRI 模型权重
+- [MAISI 在线演示](https://build.nvidia.com/nvidia/maisi) — 无需 GPU 即可试用
+- [MAISI-v1 论文（WACV 2025）](https://arxiv.org/pdf/2409.11169)
+- [MAISI-v2 论文（AAAI 2026）](https://arxiv.org/pdf/2508.05772)
+- 基于 [MONAI](https://monai.io/) 构建
 
-This project was conducted by NVIDIA in collaboration with the University of Zurich, Istanbul Medipol University, and Forithmus.
+---
 
-We would like to thank the following people for their contributions to the development of the [NV-Generate-MR-Brain](https://huggingface.co/nvidia/NV-Generate-MR-Brain) models: Bjoern Menze, Ibrahim Ethem Hamamci, Sezgin Er, Suprosanna Shit, Utku Türkbey, etc.
+## 致谢
 
-![Collaborating institutions](assets/github_logos.png)
+本项目由 NVIDIA 与苏黎世大学、伊斯坦布尔梅迪波尔大学、Forithmus 合作完成。
+
+![合作机构](assets/github_logos.png)
