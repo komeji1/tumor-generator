@@ -1,0 +1,20 @@
+{
+  "_description": "liver大肿瘤专项 — 30张medium+large肿瘤，大肿瘤Dice更容易提升",
+
+  "tasks": [
+    {"organ": "liver", "size_category": "medium", "phase": "noearly", "output": "both", "repeat": 15},
+    {"organ": "liver", "size_category": "large",  "phase": "noearly", "output": "both", "repeat": 15}
+  ],
+
+  "maisi": {
+    "generate_version": "rflow-ct",
+    "output_size": [256, 256, 128],
+    "spacing": [1.7, 1.7, 2.0],
+    "num_output_samples": 1,
+    "random_seed": null
+  },
+
+  "global": {
+    "device": "cuda"
+  }
+}

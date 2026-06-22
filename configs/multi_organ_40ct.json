@@ -1,0 +1,26 @@
+{
+  "_description": "多器官混合 — 每种器官5张，共8种器官40张CT，测试跨器官泛化",
+
+  "tasks": [
+    {"organ": "liver",     "size_category": "medium", "phase": "noearly", "output": "both", "repeat": 5},
+    {"organ": "pancreas",  "size_category": "small",  "phase": "early",   "output": "both", "repeat": 5},
+    {"organ": "kidney",    "size_category": "medium", "phase": "noearly", "output": "both", "repeat": 5},
+    {"organ": "colon",     "size_category": "small",  "phase": "early",   "output": "both", "repeat": 5},
+    {"organ": "lung",      "size_category": "small",  "phase": "early",   "output": "both", "repeat": 5},
+    {"organ": "bone",      "size_category": "small",  "phase": "early",   "output": "both", "repeat": 5},
+    {"organ": "esophagus", "size_category": "small",  "phase": "early",   "output": "both", "repeat": 5},
+    {"organ": "uterus",    "size_category": "medium", "phase": "noearly", "output": "both", "repeat": 5}
+  ],
+
+  "maisi": {
+    "generate_version": "rflow-ct",
+    "output_size": [256, 256, 128],
+    "spacing": [1.7, 1.7, 2.0],
+    "num_output_samples": 1,
+    "random_seed": null
+  },
+
+  "global": {
+    "device": "cuda"
+  }
+}

@@ -1,0 +1,48 @@
+# MAISI (NV-Generate-CTMR) .gitignore
+
+# Large files - distributed via GitHub Release
+models/
+datasets/
+output/
+release_packages/
+
+# Jupyter notebooks - too large for GitHub
+*.ipynb
+
+# Logs
+*.log
+run_*.log
+
+# Training artifacts
+output/
+outputs/tfevent/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temp files
+*.tmp
+*.bak
+debug_*.png
+temp_work_dir/
+
+# Claude Code
+.claude/
+
+# Scan scripts
+scan_masks.py
