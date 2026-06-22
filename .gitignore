@@ -1,19 +1,19 @@
-# MAISI (NV-Generate-CTMR) .gitignore
+# MAISI (NV-Generate-CTMR) .gitignore — 核心代码版本
 
-# Large files - distributed via GitHub Release
+# 大文件 — 通过 GitHub Release 分发
 models/
 datasets/
 output/
 release_packages/
 
-# Jupyter notebooks - too large for GitHub
+# Jupyter 笔记本
 *.ipynb
 
-# Logs
+# 日志
 *.log
 run_*.log
 
-# Training artifacts
+# 训练产物
 output/
 outputs/tfevent/
 
@@ -31,11 +31,11 @@ venv/
 *.swp
 *.swo
 
-# OS
+# 操作系统
 Thumbs.db
 .DS_Store
 
-# Temp files
+# 临时文件
 *.tmp
 *.bak
 debug_*.png
@@ -44,5 +44,59 @@ temp_work_dir/
 # Claude Code
 .claude/
 
-# Scan scripts
+# ====== 以下为本分支（core-code）额外排除的非核心文件 ======
+
+# 训练脚本
+scripts/diff_model_train.py
+scripts/diff_model_create_training_data.py
+scripts/train_controlnet.py
+scripts/seg_val_train.py
+train_*_tutorial.py
+
+# 评估脚本
+scripts/compute_fid_2-5d_ct.py
+
+# 测试/下载/搜索脚本
+download_lidc.py
+download_lidc_hf.py
+search_hf.py
+test_*.py
 scan_masks.py
+
+# CI / lint
+.github/
+.markdownlint.yaml
+.pre-commit-config.yaml
+
+# 训练配置
+configs/config_maisi_diff_model_ddpm-ct.json
+configs/config_maisi_*_train*.json
+configs/config_maisi_vae_train.json
+configs/config_trt.json
+configs/environment_maisi_diff_model_ddpm-ct.json
+configs/environment_maisi_*_train*.json
+configs/environment_maisi_vae_train.json
+
+# 数据集配置（含真实数据路径）
+configs/liver_50ct.json
+configs/liver_large_tumor_30ct.json
+configs/multi_organ_40ct.json
+configs/seg_val_10ct.json
+configs/tumor_paths.json
+configs/test_batch_config.json
+configs/batch_tumor_config.json
+data/
+
+# 图片资源（大文件）
+figures/
+assets/*.gif
+assets/*.png
+
+# 非核心文档
+docs/training.md
+docs/evaluation.md
+docs/data.md
+docs/applications.md
+docs/troubleshooting.md
+docs/experiment_report.md
+docs/model_integration_details.md
