@@ -113,10 +113,6 @@ NV-Generate-CTMR/  （core-code 分支）
 │   ├── diff_model_infer.py         # Diffusion Model 推理（无掩码模式）
 │   ├── download_model_data.py      # 模型权重自动下载
 │   ├── transforms.py               # 数据变换
-│   ├── tumor_adapter.py            # 肿瘤适配器
-│   ├── tumor_prompt_runner.py      # 肿瘤提示运行器
-│   ├── utils_plot.py               # 可视化工具
-│   ├── visualize_tumor.py          # 肿瘤可视化
 │   └── __init__.py                 # 包初始化
 ├── configs/                        # 推理配置文件
 │   ├── config_infer.json           # 推理参数（body_region, spacing, output_size 等）

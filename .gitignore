@@ -87,6 +87,13 @@ configs/test_batch_config.json
 configs/batch_tumor_config.json
 data/
 
+# 旧 DiffTumor 桥接代码（已删除，保留 gitignore 防止意外重新添加）
+scripts/tumor_adapter.py
+scripts/tumor_prompt_runner.py
+scripts/visualize_tumor.py
+configs/config_tumor_pipeline.json
+docs/tumor_pipeline_guide.md
+
 # 图片资源（大文件）
 figures/
 assets/*.gif
