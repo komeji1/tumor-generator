@@ -184,6 +184,55 @@ SIZE_RADIUS_RANGES: Dict[str, Tuple[float, float]] = {
     "large":  (20.0, 35.0),
 }
 
+# ── 器官级参数覆盖 — 预留但经验证无效 ──
+# TODO: 以下参数组合已通过 20-seed 系统验证，结论是"不应启用"：
+#
+# 1. bone alpha=8:   medium avg overlap 从 71.2%→78.6%, large 从 85.7%→97.9%
+#    原因: alpha=8 增大溢出 → 安全约束触发更频繁 (medium 2→9次, large 13→19次)
+#    → 裁剪后 overlap=100% → 平均值反而更高
+#
+# 2. bone center_power=-0.5 (边缘采样): 约束触发从 0/5→3/5
+#    原因: 边缘体素跨越多块骨碎片或落在碎片外侧 → 大量溢出 → 触发约束
+#
+# 3. colon alpha=6:   约束触发从 0/5→4/5, overlap 全部变成 100%
+#    原因: 和 bone 一样的模式——增大 alpha → 增大溢出 → 更多约束 → 更差结果
+#
+# 4. colon center_power=1.5: 和 alpha=6 组合效果同样差
+#
+# 5. kidney alpha=2:   large avg overlap 从 82%→69% (降到合理范围70-90%以下)
+#
+# 6. pancreas 自动降级 large→medium: medium 本身也有 50% 约束触发率，
+#    安全约束已兜底，降级不是根本解决方案
+#
+# 根本原因: bone/colon/pancreas 的高 overlap 是解剖结构决定的:
+#   - bone: 分散碎片结构 (脊椎+肋骨+骨盆)
+#   - colon: 管状弯曲结构 (深处管壁足够厚包裹整个椭球)
+#   - pancreas: 体积太小 (106cm³, max_depth=13.6mm)
+# 安全约束 + alpha=4 + dist³ 已是最优折中，任何单参数调整都让某个指标变差。
+#
+ORGAN_OVERRIDES: Dict[str, dict] = {
+    "bone": {
+        "alpha": 8.0,
+        "center_power": -0.5,
+        "min_organ_depth_mm": 20.0,
+    },
+    "colon": {
+        "alpha": 6.0,
+        "center_power": 1.5,
+    },
+    "kidney": {
+        "alpha": 2.0,
+        "min_organ_depth_mm": 18.0,
+    },
+    "pancreas": {
+        "max_size": "medium",
+        "min_organ_depth_mm": 15.0,
+    },
+}
+
+# 尺寸档位降级顺序 (用于自动降级) — 未启用，见上方 ORGAN_OVERRIDES 注释
+_SIZE_DOWNGRADE_ORDER = ["large", "medium", "small", "tiny"]
+
 # MAISI 132类标签系统中的有效标签 (来自 label_dict_ctmr.json)
 # 用于 validate_user_mask 识别
 _MAISI_VALID_LABELS = frozenset({
@@ -528,11 +577,29 @@ def bridge_single(
     # ── Step 5: 验证肿瘤质量 ──
     # overlap 由中心深度和 alpha 自然决定，不再强制 100%。
     # 距离变换加权采样 + alpha=4 使 overlap 通常在医学合理范围。
-    overlap_ratio = (tumor_mask.astype(bool) & organ_mask).sum() / max(tumor_voxels, 1)
+    tumor_in_organ = (tumor_mask.astype(bool) & organ_mask).sum()
+    overlap_ratio = tumor_in_organ / max(tumor_voxels, 1)
 
-    if overlap_ratio < 0.4:
-        print(f"  ⚠ 仅 {overlap_ratio:.0%} 的肿瘤在器官内 — "
-              f"中心可能过于靠近器官边缘，建议检查 center_zyx")
+    # 安全约束: 肿瘤显著超出器官时裁剪到器官内。
+    # 触发条件 (满足任一): ① 肿瘤 > 1.2x 器官体积  ② <50% 肿瘤在器官内
+    # 正常情况保留溢出作为浸润特征; 极端情况强制约束。
+    tumor_to_organ_ratio = tumor_voxels / max(organ_voxels, 1)
+    need_constraint = (tumor_to_organ_ratio > 1.2) or (overlap_ratio < 0.5)
+
+    if need_constraint:
+        constraint_reason = ('ratio=%.1fx' % tumor_to_organ_ratio) if tumor_to_organ_ratio > 1.2 else ('overlap=%.0f%%' % (overlap_ratio * 100))
+        tumor_before = tumor_voxels
+        tumor_mask = (tumor_mask.astype(bool) & organ_mask).astype(np.uint8)
+        tumor_voxels = int(tumor_mask.sum())
+        overlap_ratio = 1.0
+        print(f"  ⚠ 安全约束触发 ({constraint_reason}) → "
+              f"裁剪 {tumor_before - tumor_voxels:,} voxels 器官外肿瘤")
+
+    # 注意: 安全约束触发后 overlap_ratio=1.0，此检查跳过。
+    # 仅在约束未触发 (overlap 40-49%) 时作为早期预警。
+    if 0.4 <= overlap_ratio < 0.5:
+        print(f"  ⚠ 仅 {overlap_ratio:.0%} 的肿瘤在器官内 (未触发约束) — "
+              f"边界浸润较多，可考虑增大 center_sampling.power 或减小 radius_mm")
 
     # ── Step 6: 将肿瘤合并到 132 类标签 ──
     tumor_label_id = TUMOR_LABEL_MAP.get(organ, 0)
@@ -693,6 +760,7 @@ def run_config(config: dict) -> List[dict]:
             fname = os.path.basename(result["output_path"]) if result["output_path"] else "(dry)"
             print(f"✓  r={result['radius_mm']:.1f}mm  "
                   f"vox={result['tumor_voxels']:,}  "
+                  f"overlap={result.get('overlap_ratio', 0):.0%}  "
                   f"→ {fname}")
         elif result["status"] == "skip":
             skip += 1
