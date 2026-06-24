@@ -42,6 +42,7 @@ from typing import Dict, List, Optional, Tuple
 
 import nibabel as nib
 import numpy as np
+from scipy.ndimage import distance_transform_edt
 
 # ── 兼容 Windows GBK 终端 ──
 _sys_stdout = sys.stdout
@@ -151,6 +152,12 @@ ORGAN_LABEL_MAP: Dict[str, int] = {
 # 右肾标签 (MAISI 区分左右肾)
 KIDNEY_RIGHT_LABEL = 14
 
+# 肺叶标签 (MAISI 区分5个肺叶，总括标签20在实际输出中不使用)
+LUNG_LABELS = {28, 29, 30, 31, 32}  # 左上/左下/右上/右中/右下
+
+# 骨标签 (脊椎 + 肋骨 + 骨盆等，总括标签21在实际输出中不使用)
+BONE_LABELS = set(range(33, 58)) | set(range(63, 97))  # 脊椎33-57 + 肋骨/骨盆63-96
+
 # 器官 → 132类标签中的肿瘤 ID
 TUMOR_LABEL_MAP: Dict[str, int] = {
     "liver":     26,      # hepatic tumor
@@ -216,7 +223,8 @@ def _load_default_shape_config() -> dict:
     return {
         "method": "ellipsoid",
         "axis_ratio_range": [0.8, 1.2],
-        "elastic_deformation": {"enabled": True, "alpha": 15.0, "sigma": 3.0},
+        "elastic_deformation": {"enabled": True, "alpha": 4.0, "sigma": 3.0},
+        "center_sampling": {"method": "distance_weighted", "power": 3.0},
         "salt_noise": {"enabled": True, "probability": 0.02},
         "gaussian_filter": {"enabled": True, "sigma_mm": 1.0},
         "scaling_clipping": {"enabled": True},
@@ -259,6 +267,8 @@ def extract_organ_mask(label_data: np.ndarray, organ: str) -> np.ndarray:
     """从 132 类标签中提取指定器官的二值 mask。
 
     kidney 特殊处理: 合并左肾 (5) 和右肾 (14)。
+    lung  特殊处理: 合并5个肺叶 (28-32) — 总括标签20在实际输出中不使用。
+    bone  特殊处理: 合并脊椎 (33-57) + 肋骨/骨盆 (63-96) — 总括标签21在实际输出中不使用。
     """
     organ_label = ORGAN_LABEL_MAP.get(organ)
     if organ_label is None:
@@ -268,6 +278,10 @@ def extract_organ_mask(label_data: np.ndarray, organ: str) -> np.ndarray:
 
     if organ == "kidney":
         mask = (label_data == 5) | (label_data == KIDNEY_RIGHT_LABEL)
+    elif organ == "lung":
+        mask = np.isin(label_data, list(LUNG_LABELS))
+    elif organ == "bone":
+        mask = np.isin(label_data, list(BONE_LABELS))
     else:
         mask = (label_data == organ_label)
 
@@ -279,47 +293,43 @@ def sample_tumor_center(
     spacing: Tuple[float, float, float],
     radius_mm: float,
     rng: np.random.Generator,
-    elastic_alpha: float = 0.0,
-    min_edge_margin_mm: float = 2.0,
+    power: float = 3.0,
 ) -> np.ndarray:
-    """在器官内部随机采样一个有效的肿瘤中心点。
+    """在器官内部采样一个肿瘤中心点，使用距离变换加权偏向深处。
 
-    margin = 最大轴椭球半径 + 弹性形变位移(可选) + 安全间距。
-    弹性形变导致的越界由 bridge_single 的约束步骤 (tumor_mask & organ_mask) 处理。
+    距离变换 dist^power 加权采样让中心偏向器官深处，减少肿瘤大部分
+    在器官边界外的情况。溢出器官边界的部分不裁剪，保留真实浸润特征。
 
     Args:
         organ_mask: 器官二值 mask
         spacing: 体素间距 (dz, dy, dx) mm/voxel
-        radius_mm: 实际采样的肿瘤半径 (mm)
+        radius_mm: 实际采样的肿瘤半径 (mm) (用于日志，不影响采样)
         rng: 随机数生成器
-        elastic_alpha: 额外计入 margin 的弹性形变位移 (体素), 默认 0
-        min_edge_margin_mm: 额外安全间距 (默认 2mm)
+        power: 距离变换加权指数，越大越偏向深处 (默认 3.0)
+            power=0 → 均匀随机 (旧行为)
+            power=2 → 中等偏向深处
+            power=3 → 强偏向深处 (推荐默认)
     """
     indices = np.argwhere(organ_mask)  # (N, 3) — (z, y, x)
     if len(indices) == 0:
         raise ValueError("器官 mask 为空，无法放置肿瘤")
 
-    # margin: 椭球半径 (mm → voxel) + 弹性形变 buffer (voxel) + 安全间距 (voxel)
-    margin_vox = tuple(
-        int(np.ceil(radius_mm / max(s, 0.01) + elastic_alpha + min_edge_margin_mm / max(s, 0.01)))
-        for s in spacing
-    )
+    if power <= 0:
+        # power=0: 均匀随机 (旧行为兼容)
+        idx = rng.integers(0, len(indices))
+        return indices[idx].astype(np.float64)
 
-    D, H, W = organ_mask.shape
+    # 距离变换: 每个 voxel 到器官边界的最短距离 (mm)
+    dist = distance_transform_edt(organ_mask, spacing)
+    distances = dist[organ_mask]  # 只取器官内 voxel 的距离值
 
-    valid = (
-        (indices[:, 0] >= margin_vox[0]) & (indices[:, 0] < D - margin_vox[0])
-        & (indices[:, 1] >= margin_vox[1]) & (indices[:, 1] < H - margin_vox[1])
-        & (indices[:, 2] >= margin_vox[2]) & (indices[:, 2] < W - margin_vox[2])
-    )
-    valid_indices = indices[valid]
+    # dist^power 加权: 深处 voxel 权重大，边缘 voxel 权重小
+    # max(dist, 1.0) 防止距离<1mm的voxel权重趋零
+    weights = np.maximum(distances, 1.0) ** power
+    weights = weights / weights.sum()
 
-    if len(valid_indices) == 0:
-        # 器官太小 → 从所有体素中选，后续约束步骤会裁剪越界部分
-        valid_indices = indices
-
-    idx = rng.integers(0, len(valid_indices))
-    return valid_indices[idx].astype(np.float64)
+    idx = rng.choice(len(indices), p=weights)
+    return indices[idx].astype(np.float64)
 
 
 def sample_radius(size_category: str, rng: np.random.Generator) -> float:
@@ -437,6 +447,10 @@ def bridge_single(
     elastic_cfg = shape_config.get("elastic_deformation", {})
     use_elastic = elastic_cfg.get("enabled", True)
 
+    # 获取中心采样参数
+    sampling_cfg = shape_config.get("center_sampling", {})
+    sampling_power = float(sampling_cfg.get("power", 3.0))
+
     if center_zyx is not None:
         center = np.array(center_zyx, dtype=np.float64)
         c_int = tuple(center.astype(int))
@@ -454,22 +468,24 @@ def bridge_single(
         if not organ_mask[c_int]:
             print(f"  ⚠ 指定中心 {c_int} 不在器官 {organ} 内部，将继续生成")
     else:
-        # 使用实际半径计算中心采样的 margin
-        # 弹性形变导致的越界由下面的约束步骤 (tumor_mask & organ_mask) 处理
+        # 距离变换加权采样让中心偏向器官深处
         center = sample_tumor_center(
-            organ_mask, spacing, radius, rng,
+            organ_mask, spacing, radius, rng, power=sampling_power,
         )
 
-    # ── Step 4-4.5: 生成肿瘤 + 约束 (带重试) ──
-    # 弹性形变可能将小肿瘤大部分推到器官外，导致约束后体素过少。
-    # 策略:
+    # ── Step 4-4.5: 生成肿瘤 (带重试) ──
+    # 不裁剪到器官内部 — 保留弹性形变产生的真实浸润特征（部分溢出器官边界）。
+    # 重试策略: 体积太小 (<200 voxels) 时换中心重新采样。
     #   前 3 次: 用原始 shape_config (含弹性形变), 换不同中心
-    #   后 2 次: 关闭弹性形变, 确保小肿瘤有足够体素留在器官内
+    #   后 2 次: 关闭弹性形变, 确保小肿瘤有足够体素
+    MIN_TUMOR_VOXELS = 200
     MAX_RETRIES = 5
     tumor_mask = None
     for attempt in range(MAX_RETRIES):
         if attempt > 0:
-            center = sample_tumor_center(organ_mask, spacing, radius, rng)
+            center = sample_tumor_center(
+                organ_mask, spacing, radius, rng, power=sampling_power,
+            )
 
         # 超过 3 次失败 → 关闭弹性形变
         cfg = shape_config
@@ -479,7 +495,7 @@ def bridge_single(
             if attempt == 3:
                 print(f"  ℹ 重试 {attempt+1}/{MAX_RETRIES}: 临时关闭弹性形变")
 
-        tumor_mask_raw = create_mask(
+        tumor_mask = create_mask(
             center_zyx=tuple(float(c) for c in center),
             radius_mm=radius,
             shape=shape,
@@ -488,20 +504,17 @@ def bridge_single(
             rng=rng,
         )
 
-        # 约束到器官内部
-        tumor_mask = (tumor_mask_raw.astype(bool) & organ_mask).astype(np.uint8)
-        if tumor_mask.sum() >= 5:
+        # 不裁剪: 保留真实浸润 (溢出器官边界是医学合理的)
+        if tumor_mask.sum() >= MIN_TUMOR_VOXELS:
             break  # 成功
 
-    tumor_voxels_raw = int(tumor_mask_raw.sum())
     tumor_voxels = int(tumor_mask.sum())
-    cropped_fraction = (tumor_voxels_raw - tumor_voxels) / max(tumor_voxels_raw, 1)
 
-    if tumor_voxels < 5:
+    if tumor_voxels < MIN_TUMOR_VOXELS:
         return {
             "status": "fail",
-            "reason": (f"约束到器官后肿瘤体素过少 ({tumor_voxels}, "
-                       f"原始 {tumor_voxels_raw}, {cropped_fraction:.0%} 被裁剪, "
+            "reason": (f"肿瘤体素过少 ({tumor_voxels}, "
+                       f"期望 >= {MIN_TUMOR_VOXELS}, "
                        f"已重试 {MAX_RETRIES} 次) — "
                        f"建议: 换更大的 size_category"),
             "organ": organ,
@@ -513,14 +526,31 @@ def bridge_single(
         }
 
     # ── Step 5: 验证肿瘤质量 ──
-    # 约束后重叠率应为 100% (肿瘤已裁剪到器官内)
-    overlap = tumor_mask.astype(bool) & organ_mask
-    overlap_ratio = overlap.sum() / max(tumor_voxels, 1)
+    # overlap 由中心深度和 alpha 自然决定，不再强制 100%。
+    # 距离变换加权采样 + alpha=4 使 overlap 通常在医学合理范围。
+    tumor_in_organ = (tumor_mask.astype(bool) & organ_mask).sum()
+    overlap_ratio = tumor_in_organ / max(tumor_voxels, 1)
 
-    if cropped_fraction > 0.5:
-        print(f"  ⚠ {cropped_fraction:.0%} 的肿瘤体素在器官外被裁剪 "
-              f"({tumor_voxels_raw:,} → {tumor_voxels:,}) — "
-              f"可考虑缩小半径或设 elastic_deformation.enabled=false")
+    # 安全约束: 肿瘤显著超出器官时裁剪到器官内。
+    # 触发条件 (满足任一): ① 肿瘤 > 1.2x 器官体积  ② <50% 肿瘤在器官内
+    # 正常情况保留溢出作为浸润特征; 极端情况强制约束。
+    tumor_to_organ_ratio = tumor_voxels / max(organ_voxels, 1)
+    need_constraint = (tumor_to_organ_ratio > 1.2) or (overlap_ratio < 0.5)
+
+    if need_constraint:
+        constraint_reason = ('ratio=%.1fx' % tumor_to_organ_ratio) if tumor_to_organ_ratio > 1.2 else ('overlap=%.0f%%' % (overlap_ratio * 100))
+        tumor_before = tumor_voxels
+        tumor_mask = (tumor_mask.astype(bool) & organ_mask).astype(np.uint8)
+        tumor_voxels = int(tumor_mask.sum())
+        overlap_ratio = 1.0
+        print(f"  ⚠ 安全约束触发 ({constraint_reason}) → "
+              f"裁剪 {tumor_before - tumor_voxels:,} voxels 器官外肿瘤")
+
+    # 注意: 安全约束触发后 overlap_ratio=1.0，此检查跳过。
+    # 仅在约束未触发 (overlap 40-49%) 时作为早期预警。
+    if 0.4 <= overlap_ratio < 0.5:
+        print(f"  ⚠ 仅 {overlap_ratio:.0%} 的肿瘤在器官内 (未触发约束) — "
+              f"边界浸润较多，可考虑增大 center_sampling.power 或减小 radius_mm")
 
     # ── Step 6: 将肿瘤合并到 132 类标签 ──
     tumor_label_id = TUMOR_LABEL_MAP.get(organ, 0)
@@ -549,7 +579,7 @@ def bridge_single(
     if dry_run:
         output_path = None
     else:
-        out_dir = output_dir or os.path.dirname(os.path.abspath(label_path))
+        out_dir = _resolve_path(output_dir) if output_dir else os.path.dirname(os.path.abspath(label_path))
         os.makedirs(out_dir, exist_ok=True)
 
         if output_name:
@@ -584,7 +614,7 @@ def bridge_single(
         "center_zyx": [float(c) for c in center],
         "radius_mm": radius,
         "tumor_voxels": tumor_voxels,
-        "tumor_voxels_raw": tumor_voxels_raw,
+        "overlap_ratio": float(overlap_ratio),
         "organ_voxels": organ_voxels,
         "tumor_label_id": tumor_label_id,
         "organ_label_id": ORGAN_LABEL_MAP[organ],
@@ -681,6 +711,7 @@ def run_config(config: dict) -> List[dict]:
             fname = os.path.basename(result["output_path"]) if result["output_path"] else "(dry)"
             print(f"✓  r={result['radius_mm']:.1f}mm  "
                   f"vox={result['tumor_voxels']:,}  "
+                  f"overlap={result.get('overlap_ratio', 0):.0%}  "
                   f"→ {fname}")
         elif result["status"] == "skip":
             skip += 1

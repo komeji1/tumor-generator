@@ -1,15 +1,21 @@
 {
   "_description": "Mask 项目默认肿瘤形状配置 — 供 bridge_maisi_mask.py 使用",
-  "_note": "所有 enabled 开关可独立关闭。alpha/sigma 是体素单位，不同 spacing 下效果不同，建议按需调整。",
+  "_note": "所有 enabled 开关可独立关闭。alpha/sigma 是体素单位，不同 spacing 下效果不同，建议按需调整。alpha=4 匹配真实肿瘤边界不规则度(2-10mm位移约7mm), alpha=15(27mm位移)远超真实值。",
 
   "method": "ellipsoid",
   "axis_ratio_range": [0.8, 1.2],
 
   "elastic_deformation": {
-    "_doc": "弹性形变 — 使肿瘤边界自然不规则。alpha=变形幅度, sigma=平滑度(voxel)",
+    "_doc": "弹性形变 — 使肿瘤边界自然不规则。alpha=变形幅度(voxel), sigma=平滑度(voxel)。alpha=4≈7mm位移, 匹配真实肿瘤浸润深度2-10mm。",
     "enabled": true,
-    "alpha": 15.0,
+    "alpha": 4.0,
     "sigma": 3.0
+  },
+
+  "center_sampling": {
+    "_doc": "肿瘤中心采样策略 — 距离变换加权让中心偏向器官深处, 减少肿瘤大部分溢出器官边界的情况。power越大越偏向深处, power=3是折中值。",
+    "method": "distance_weighted",
+    "power": 3.0
   },
 
   "salt_noise": {

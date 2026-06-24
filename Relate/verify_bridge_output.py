@@ -358,12 +358,31 @@ def check_maisi_compatibility(
 ):
     """验证输出是否符合 MAISI ControlNet 的输入要求。"""
     img = nib.load(merged_path)
-    shape = merged.shape      # nibabel: (D, H, W)
+    shape = merged.shape
     spacing = tuple(float(s) for s in img.header.get_zooms()[:3])
 
-    # MAISI 内部使用 (H, W, D) 排序
-    maisi_shape = (shape[1], shape[2], shape[0])  # (H, W, D)
-    maisi_spacing = (spacing[1], spacing[2], spacing[0])  # (dy, dx, dz)
+    # MAISI 使用 MONAI Orientationd(axcodes="RAS") 将数据重排为 RAS 顺序。
+    # 对于 RAS-aligned 的 NIfTI (大多数 MAISI 输出都是如此),
+    # nibabel shape 已经是 (R_dim, A_dim, S_dim) = (H, W, D)。
+    # 直接使用 nibabel shape 即可，不需要轴交换。
+    #
+    # 如果 affine 不是 RAS-aligned, 则需要通过 nib.aff2axcodes 判断轴方向
+    # 并按 RAS 顺序重排。但这种情况在实际 MAISI 输出中不会出现。
+    axcodes = nib.aff2axcodes(img.affine)
+
+    if axcodes == ("R", "A", "S"):
+        # RAS-aligned: nibabel shape 直接对应 MAISI (H, W, D)
+        maisi_shape = shape
+        maisi_spacing = spacing
+    else:
+        # 非 RAS-aligned: 需要按 RAS 顺序重排 shape 和 spacing
+        # 确定 nibabel 各轴对应的 RAS 方向
+        ras_order = {"R": 0, "A": 1, "S": 2}
+        axis_map = [ras_order[code] for code in axcodes]
+        maisi_shape = tuple(shape[i] for i in [
+            axis_map.index(0), axis_map.index(1), axis_map.index(2)])
+        maisi_spacing = tuple(spacing[i] for i in [
+            axis_map.index(0), axis_map.index(1), axis_map.index(2)])
 
     # 检查 _is_valid_target 条件
     xy_equal = maisi_shape[0] == maisi_shape[1]

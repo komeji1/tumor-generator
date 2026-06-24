@@ -1,11 +1,18 @@
 {
   "maisi": {
-    "ct_path": "",
-    "label_path": ""
+    "ct_path": "output/sample_20260619_184801_368695_image.nii.gz",
+    "label_path": "output/sample_20260619_184801_368695_label_full.nii.gz"
   },
   "tasks": [
+    {"organ": "liver",    "size_category": "large", "repeat": 3},
+    {"organ": "pancreas", "size_category": "large", "repeat": 2},
+    {"organ": "kidney",   "size_category": "large", "repeat": 3},
+    {"organ": "colon",    "size_category": "large", "repeat": 2},
+    {"organ": "lung",     "size_category": "large", "repeat": 3},
+    {"organ": "bone",     "size_category": "large", "repeat": 2}
   ],
   "shape_config": null,
-  "output_dir": null,
-  "seed": null
+  "output_dir": "output",
+  "seed": null,
+  "_example_outputs": "example_output/ — 30个示例 .nii.gz 文件 (来自 bridge-optimization 分支)"
 }

@@ -370,6 +370,29 @@ NV-Generate-CTMR/
 
 ---
 
+## 肿瘤桥接管线 (Relate/)
+
+`Relate/` 目录提供了精确肿瘤 mask 生成 + MAISI ControlNet 完整管线：
+
+```
+MAISI 生成 CT + 132类mask (不含肿瘤)
+    → Relate/bridge_maisi_mask.py 在器官内画精确肿瘤
+    → MAISI ControlNet 按合并mask生成最终 CT
+```
+
+**快速开始：**
+
+```bash
+cd Relate/
+# 编辑 prompts.json，填入 MAISI 输出路径和任务
+python bridge_maisi_mask.py
+# 输出默认保存到 ../output/
+```
+
+详见 `Relate/使用说明.md`。示例输出在 `example_output/`。
+
+---
+
 ## 致谢
 
 本项目由 NVIDIA 与苏黎世大学、伊斯坦布尔梅迪波尔大学、Forithmus 合作完成。
