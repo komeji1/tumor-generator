@@ -1,0 +1,31 @@
+{
+  "_description": "Mask 项目默认肿瘤形状配置 — 供 bridge_maisi_mask.py 使用",
+  "_note": "所有 enabled 开关可独立关闭。alpha/sigma 是体素单位，不同 spacing 下效果不同，建议按需调整。",
+
+  "method": "ellipsoid",
+  "axis_ratio_range": [0.8, 1.2],
+
+  "elastic_deformation": {
+    "_doc": "弹性形变 — 使肿瘤边界自然不规则。alpha=变形幅度, sigma=平滑度(voxel)",
+    "enabled": true,
+    "alpha": 15.0,
+    "sigma": 3.0
+  },
+
+  "salt_noise": {
+    "_doc": "Salt-Noise — 在肿瘤内部随机翻转体素，模拟内部纹理不规则",
+    "enabled": true,
+    "probability": 0.02
+  },
+
+  "gaussian_filter": {
+    "_doc": "高斯平滑 — 柔化肿瘤边界。sigma_mm=高斯核sigma(mm)",
+    "enabled": true,
+    "sigma_mm": 1.0
+  },
+
+  "scaling_clipping": {
+    "_doc": "二值化裁剪 — threshold=0.5 将平滑后的浮点mask转回{0,1}",
+    "enabled": true
+  }
+}
