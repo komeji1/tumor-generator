@@ -1,0 +1,17 @@
+{
+  "maisi": {
+    "ct_path": "output/sample_20260619_184801_368695_image.nii.gz",
+    "label_path": "output/sample_20260619_184801_368695_label_full.nii.gz"
+  },
+  "tasks": [
+    {"organ": "liver",    "size_category": "medium", "repeat": 3},
+    {"organ": "pancreas", "size_category": "medium", "repeat": 2},
+    {"organ": "kidney",   "size_category": "medium", "repeat": 3},
+    {"organ": "colon",    "size_category": "medium", "repeat": 2},
+    {"organ": "lung",     "size_category": "medium", "repeat": 3},
+    {"organ": "bone",     "size_category": "medium", "repeat": 2}
+  ],
+  "shape_config": null,
+  "output_dir": null,
+  "seed": null
+}

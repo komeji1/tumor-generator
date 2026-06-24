@@ -1,0 +1,44 @@
+{
+  "_description": "MAISI + Mask 桥接示例配置 — 复制修改后用于实际运行",
+  "_guide": {
+    "organ": "liver | pancreas | kidney | colon | lung | bone | esophagus | uterus",
+    "size_category": "tiny(2-5mm) | small(5-10mm) | medium(10-20mm) | large(20-35mm)",
+    "repeat": "同一任务重复次数 (每次随机中心+半径)",
+    "center_zyx": "[z,y,x] 体素坐标 — 不设则器官内随机",
+    "radius_mm": "精确半径 mm — 不设则按 size_category 范围随机",
+    "output_name": "自定义输出文件名 — 不设则自动命名",
+    "seed": "随机种子 — 不设则随机"
+  },
+
+  "maisi": {
+    "ct_path": "output/synthetic_ct.nii.gz",
+    "label_path": "output/synthetic_label.nii.gz",
+    "_note": "MAISI 步骤1的输出。如果路径是相对路径，相对于 MAISI 项目根目录解析。"
+  },
+
+  "tasks": [
+    {"_comment": "肝脏中等肿瘤 ×2"},
+    {"organ": "liver",    "size_category": "medium", "repeat": 2},
+
+    {"_comment": "胰腺小肿瘤 ×1"},
+    {"organ": "pancreas", "size_category": "small",  "repeat": 1},
+
+    {"_comment": "肾脏大肿瘤(囊肿) ×2"},
+    {"organ": "kidney",   "size_category": "large",  "repeat": 2},
+
+    {"_comment": "结肠大肿瘤(癌) ×1"},
+    {"organ": "colon",    "size_category": "large",  "repeat": 1},
+
+    {"_comment": "肺肿瘤 ×1"},
+    {"organ": "lung",     "size_category": "medium", "repeat": 1}
+  ],
+
+  "shape_config": null,
+  "_shape_config_note": "null=使用 DEFAULT_SHAPE_CONFIG.json。可内联覆盖，如: {\"elastic_deformation\": {\"enabled\": false}}",
+
+  "output_dir": null,
+  "_output_dir_note": "null=输出到与 label 文件同目录",
+
+  "seed": null,
+  "_seed_note": "全局随机种子。每个任务可单独覆盖。"
+}
