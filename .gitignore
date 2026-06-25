@@ -1,9 +1,12 @@
 # MAISI (NV-Generate-CTMR) .gitignore — 核心代码版本
 
-# 大文件 — 通过 GitHub Release 分发
-models/
+# 大文件 — 通过 GitHub Release / Git LFS 分发
+# models/ — 权重文件已通过 Git LFS 入库，不再排除整个目录
+# 以下3个>2GB文件超出LFS限制，通过Release分发：
+models/diff_unet_3d_rflow-ct.pt
+models/diff_unet_3d_rflow-mr.pt
+models/diff_unet_3d_rflow-mr-brain_v0.pt
 datasets/
-output/
 release_packages/
 
 # Jupyter 笔记本
@@ -13,7 +16,7 @@ release_packages/
 *.log
 run_*.log
 
-# 训练产物
+# 训练产物 — NIfTI等大文件排除，权重已复制到 models/ 目录入库
 output/
 outputs/tfevent/
 
@@ -35,7 +38,7 @@ venv/
 Thumbs.db
 .DS_Store
 
-# 临时文件
+# 临时文件 — 权重已复制到 models/ 目录入库
 *.tmp
 *.bak
 debug_*.png
