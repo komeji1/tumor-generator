@@ -194,7 +194,7 @@ def run_controlnet_conditioned_image_dm(
 
     recon_model = ReconModel(autoencoder=autoencoder, scale_factor=scale_factor).to(device)
 
-    with torch.no_grad(), torch.amp.autocast("cuda"):
+    with torch.no_grad(), torch.amp.autocast(device.type):
         logging.info("---- Start generating latent features... ----")
         start_time = time.time()
 
@@ -288,7 +288,8 @@ def run_controlnet_conditioned_image_dm(
 
         del unet_inputs, controlnet_inputs, model_output, down_block_res_samples, mid_block_res_sample
         gc.collect()
-        torch.cuda.empty_cache()
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
 
         # Sliding-window AE decode
         logging.info("---- Start decoding latent features into images... ----")
@@ -316,7 +317,8 @@ def run_controlnet_conditioned_image_dm(
         # HU range mapping (modality-agnostic post-process)
         synthetic_images = (synthetic_images - b_min) / (b_max - b_min)
         synthetic_images = synthetic_images * (a_max - a_min) + a_min
-        torch.cuda.empty_cache()
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
 
     return synthetic_images
 
