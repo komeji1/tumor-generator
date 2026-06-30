@@ -66,20 +66,30 @@ _VALID_DIM_Z = (128, 256, 384, 512, 640, 768)
 _VALID_SPACING_XY_RANGE = (0.5, 3.0)
 # MAISI 接受的 Z 间距范围 (mm)
 _VALID_SPACING_Z_RANGE = (0.5, 5.0)
-# MAISI 132 类标签词汇表: 0..132 + body envelope (200)
-_MAISI_VALID_LABELS = set(range(0, 133)) | {200}
+# MAISI 132 类标签词汇表 + 桥接新增肿瘤标签 (133-144) + body envelope (200)
+_MAISI_VALID_LABELS = set(range(0, 133)) | set(range(133, 145)) | {200}
 
 # 器官标签映射
 ORGAN_LABELS = {
+    # 原有
     "liver": 1, "pancreas": 4, "kidney_left": 5, "kidney_right": 14,
     "colon": 62, "esophagus": 11, "uterus": 161, "lung_left": 20,
-    "lung_right": 21, "bone": 21, "spleen": 3, "stomach": 2,
+    "lung_right": 21, "bone": 21,
+    # 第四步新增
+    "spleen": 3, "stomach": 12, "adrenal": 8, "gallbladder": 10,
+    "duodenum": 13, "bladder": 15, "small_bowel": 19,
+    "brain": 22, "heart": 115, "prostate": 118, "thyroid": 126,
 }
 
 # 肿瘤标签映射
 TUMOR_LABELS = {
+    # 原有 (MAISI 132类中已有)
     "liver": 26, "pancreas": 24, "kidney": 116, "colon": 27,
     "lung": 23, "bone": 128,
+    # 第四步新增 (133-144)
+    "esophagus": 133, "stomach": 134, "bladder": 135, "prostate": 136,
+    "thyroid": 137, "brain": 138, "adrenal": 139, "small_bowel": 140,
+    "duodenum": 141, "gallbladder": 142, "spleen": 143, "heart": 144,
 }
 TUMOR_LABEL_NAMES = {v: k for k, v in TUMOR_LABELS.items()}
 
@@ -229,7 +239,7 @@ def check_label_vocabulary(merged: np.ndarray, report: VerificationReport):
                    + ("..." if len(unknown) > 15 else ""))
     else:
         report.add("标签合法性", True,
-                   f"全部 {len(known)} 个标签 ∈ MAISI 132-class 词汇表")
+                   f"全部 {len(known)} 个标签 ∈ MAISI 144-class 词汇表 (132+桥接肿瘤)")
 
     # 列出所有标签及其体素数量
     label_counts = {}
@@ -257,7 +267,7 @@ def _get_label_name(label_id: int) -> str:
     for name, lid in TUMOR_LABELS.items():
         if lid == label_id:
             return f"{name}_tumor"
-    if 0 < label_id <= 132:
+    if 0 < label_id <= 144:
         return "other organ"
     return "UNKNOWN"
 

@@ -4,15 +4,20 @@
     "label_path": "output/sample_20260619_184801_368695_label_full.nii.gz"
   },
   "tasks": [
-    {"organ": "liver",    "size_category": "large", "repeat": 3},
-    {"organ": "pancreas", "size_category": "large", "repeat": 2},
-    {"organ": "kidney",   "size_category": "large", "repeat": 3},
-    {"organ": "colon",    "size_category": "large", "repeat": 2},
-    {"organ": "lung",     "size_category": "large", "repeat": 3},
-    {"organ": "bone",     "size_category": "large", "repeat": 2}
+    {"organ": "liver",    "size_category": "large",  "repeat": 3},
+    {"organ": "liver",    "size_category": "medium", "repeat": 3},
+    {"organ": "pancreas", "size_category": "medium", "repeat": 3},
+    {"organ": "pancreas", "size_category": "small",  "repeat": 2},
+    {"organ": "kidney",   "size_category": "large",  "repeat": 3},
+    {"organ": "kidney",   "size_category": "medium", "repeat": 3},
+    {"organ": "colon",    "size_category": "large",  "repeat": 2},
+    {"organ": "colon",    "size_category": "medium", "repeat": 3},
+    {"organ": "lung",     "size_category": "large",  "repeat": 3},
+    {"organ": "lung",     "size_category": "medium", "repeat": 3},
+    {"organ": "bone",     "size_category": "large",  "repeat": 2},
+    {"organ": "bone",     "size_category": "medium", "repeat": 3}
   ],
   "shape_config": null,
   "output_dir": "output",
-  "seed": null,
-  "_example_outputs": "example_output/ — 30个示例 .nii.gz 文件 (来自 bridge-optimization 分支)"
+  "seed": null
 }

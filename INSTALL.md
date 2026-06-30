@@ -96,21 +96,15 @@ python -m scripts.infer_image_from_mask \
     --device cuda
 ```
 
-### 使用肿瘤生成管线（需额外下载 DiffTumor）
+### 使用肿瘤生成管线（MAISI + Mask 桥接）
 
-如果要使用 MAISI + DiffTumor 肿瘤生成管线，需额外：
+肿瘤生成现在通过 Relate 桥接脚本完成（不再依赖 DiffTumor 纹理注入）：
 
-1. 下载 DiffTumor 仓库：
-```bash
-git clone https://github.com/MrGiovanni/DiffTumor.git
-```
+1. MAISI 生成基础 CT + 132类 mask（不含肿瘤）
+2. 桥接脚本在器官内画精确肿瘤，合并到 132类 mask
+3. MAISI 根据合并 mask 重新生成含肿瘤的 CT
 
-2. 修改 `configs/tumor_paths.json`，将路径指向你本地的 DiffTumor 目录
-
-3. 运行肿瘤生成：
-```bash
-python -m scripts.tumor_prompt_runner --quick --organ liver --size medium
-```
+详见 `Relate/` 目录下的文档和脚本。
 
 ## 模型权重文件说明
 
